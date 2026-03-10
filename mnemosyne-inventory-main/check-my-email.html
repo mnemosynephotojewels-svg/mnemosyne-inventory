@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check My Email - Mnemosyne</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: white;
+      border-radius: 20px;
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    h1 {
+      color: #0a2647;
+      font-size: 36px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+    
+    .email-box {
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      border-radius: 16px;
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 24px rgba(212, 175, 55, 0.3);
+    }
+    
+    .email-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0a2647;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    
+    .email-value {
+      font-size: 32px;
+      font-weight: bold;
+      color: #0a2647;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      word-break: break-all;
+      margin-bottom: 16px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .copy-btn {
+      background: #0a2647;
+      color: #d4af37;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .copy-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(10, 38, 71, 0.3);
+    }
+    
+    .copy-btn:active {
+      transform: translateY(0);
+    }
+    
+    .info-section {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border-left: 4px solid #d4af37;
+    }
+    
+    .info-section h2 {
+      color: #0a2647;
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    
+    .info-section p {
+      color: #495057;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    
+    .info-section ul {
+      margin-left: 24px;
+      color: #495057;
+      line-height: 1.8;
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .warning-box strong {
+      color: #856404;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    
+    .warning-box p {
+      color: #856404;
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    .success-box {
+      background: #d4edda;
+      border: 2px solid #28a745;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    
+    .success-box strong {
+      color: #155724;
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+    
+    .success-box p {
+      color: #155724;
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    .step-by-step {
+      background: #e3f2fd;
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 24px;
+    }
+    
+    .step-by-step h3 {
+      color: #0a2647;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    
+    .step {
+      display: flex;
+      align-items: start;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding: 16px;
+      background: white;
+      border-radius: 10px;
+    }
+    
+    .step-number {
+      background: #d4af37;
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-content strong {
+      display: block;
+      color: #0a2647;
+      margin-bottom: 4px;
+    }
+    
+    .step-content p {
+      color: #666;
+      font-size: 14px;
+      margin: 0;
+    }
+    
+    .no-email {
+      background: #f8d7da;
+      border: 2px solid #dc3545;
+      color: #721c24;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    code {
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d4af37;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📧 Your Mnemosyne Email</h1>
+    <p class="subtitle">Use this email for password reset</p>
+    
+    <div id="emailDisplay"></div>
+    
+    <div class="step-by-step">
+      <h3>📋 How to Use Password Reset</h3>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <strong>Copy Your Email</strong>
+          <p>Click the button above to copy your email address</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <strong>Go to Forgot Password</strong>
+          <p>On the login page, click "Forgot Password?"</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <strong>Paste Your Email</strong>
+          <p>Paste the email you just copied</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <strong>Look for Yellow Alert Box</strong>
+          <p>After clicking "Send Code", a big yellow box will show your 6-digit code</p>
+        </div>
+      </div>
+      
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <strong>Enter Code & Reset</strong>
+          <p>Copy the code, paste it, and set your new password!</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkEmail() {
+      const storedEmail = localStorage.getItem('mnemosyne_current_email');
+      const defaultEmail = 'mnemosyne@gmail.com';
+      const email = storedEmail || defaultEmail;
+      const isDefault = !storedEmail;
+      
+      const emailDisplay = document.getElementById('emailDisplay');
+      
+      if (isDefault) {
+        emailDisplay.innerHTML = `
+          <div class="warning-box">
+            <strong>⚠️ Using Default Email</strong>
+            <p>No email has been set in Account Settings. Using default: <code>${defaultEmail}</code></p>
+          </div>
+          
+          <div class="email-box">
+            <div class="email-label">Your Email Address</div>
+            <div class="email-value">${email}</div>
+            <button class="copy-btn" onclick="copyEmail('${email}')">
+              📋 Copy Email
+            </button>
+          </div>
+          
+          <div class="info-section">
+            <h2>💡 To Set Your Own Email</h2>
+            <p>You can change this to your real email:</p>
+            <ul>
+              <li>Log in to Mnemosyne</li>
+              <li>Click "Account Settings" in the header</li>
+              <li>Update the Email field</li>
+              <li>Save your changes</li>
+            </ul>
+          </div>
+        `;
+      } else {
+        emailDisplay.innerHTML = `
+          <div class="success-box">
+            <strong>✅ Email Found in Account Settings</strong>
+            <p>This is the email you must use for password reset.</p>
+          </div>
+          
+          <div class="email-box">
+            <div class="email-label">Your Email Address</div>
+            <div class="email-value">${email}</div>
+            <button class="copy-btn" onclick="copyEmail('${email}')">
+              📋 Copy Email
+            </button>
+          </div>
+          
+          <div class="info-section">
+            <h2>✅ Perfect!</h2>
+            <p>You've set a custom email in Account Settings. When you use password reset, make sure to use this exact email address.</p>
+          </div>
+        `;
+      }
+      
+      // Log to console for debugging
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('📧 MNEMOSYNE EMAIL CHECK');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('Email:', email);
+      console.log('Is Default:', isDefault);
+      console.log('Source:', isDefault ? 'Default' : 'Account Settings');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+      console.log('💡 Use THIS email for password reset!');
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    }
+    
+    function copyEmail(email) {
+      navigator.clipboard.writeText(email).then(() => {
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Copied!';
+        btn.style.background = '#28a745';
+        
+        setTimeout(() => {
+          btn.innerHTML = originalText;
+          btn.style.background = '#0a2647';
+        }, 2000);
+        
+        console.log('✅ Email copied to clipboard:', email);
+      }).catch(err => {
+        alert('Failed to copy. Email: ' + email);
+      });
+    }
+    
+    // Check email on page load
+    checkEmail();
+  </script>
+</body>
+</html>

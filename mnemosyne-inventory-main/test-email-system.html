@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Mnemosyne Email System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    h1 {
+      color: #0a2647;
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    
+    .status {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      margin-bottom: 30px;
+    }
+    
+    .status.demo {
+      background: #fff3cd;
+      color: #856404;
+      border: 2px solid #ffc107;
+    }
+    
+    .status.active {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #28a745;
+    }
+    
+    .test-section {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      border-left: 4px solid #d4af37;
+    }
+    
+    h2 {
+      color: #0a2647;
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+    
+    .input-group {
+      margin-bottom: 16px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    
+    input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      color: #d4af37;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(10, 38, 71, 0.3);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .result {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 8px;
+      display: none;
+    }
+    
+    .result.success {
+      background: #d4edda;
+      border: 2px solid #28a745;
+      color: #155724;
+      display: block;
+    }
+    
+    .result.error {
+      background: #f8d7da;
+      border: 2px solid #dc3545;
+      color: #721c24;
+      display: block;
+    }
+    
+    .result.demo {
+      background: #fff3cd;
+      border: 2px solid #ffc107;
+      color: #856404;
+      display: block;
+    }
+    
+    .code-display {
+      font-family: 'Courier New', monospace;
+      font-size: 36px;
+      letter-spacing: 8px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      color: #0a2647;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 16px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    
+    .info-box p {
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    
+    .info-box strong {
+      color: #0a2647;
+    }
+    
+    code {
+      background: #f8f9fa;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d4af37;
+    }
+    
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #d4af37;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔧 Mnemosyne Email System Test</h1>
+    <div class="status demo" id="status">
+      🟡 Demo Mode Active
+    </div>
+    
+    <div class="info-box">
+      <p><strong>📋 What This Test Does:</strong></p>
+      <p>This page tests the email verification system by calling your Supabase Edge Function directly. It will show you:</p>
+      <ul style="margin-left: 20px; margin-top: 8px;">
+        <li>✅ Whether the Edge Function is deployed and accessible</li>
+        <li>✅ Whether the RESEND_API_KEY is configured</li>
+        <li>✅ The generated verification code (in demo mode)</li>
+        <li>✅ Whether an email was successfully sent</li>
+      </ul>
+    </div>
+    
+    <div class="test-section">
+      <h2>Test Email Verification</h2>
+      
+      <div class="input-group">
+        <label for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email" 
+          placeholder="your.email@example.com"
+          value="mnemosyne@gmail.com"
+        >
+      </div>
+      
+      <div class="input-group">
+        <label for="name">Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          placeholder="Your Name"
+          value="Mnemosyne Admin"
+        >
+      </div>
+      
+      <button onclick="testEmail()" id="testBtn">
+        🚀 Send Test Verification Code
+      </button>
+      
+      <div id="result" class="result"></div>
+    </div>
+    
+    <div class="info-box" style="background: #fff3cd; border-left-color: #ffc107;">
+      <p><strong>💡 Expected Behavior:</strong></p>
+      <p><strong>Demo Mode (Current):</strong> You'll see the verification code displayed below. No actual email will be sent.</p>
+      <p><strong>Production Mode:</strong> An actual email will be sent to the address above, and you'll see a success message.</p>
+    </div>
+  </div>
+
+  <script>
+    const projectId = 'anntzpswficnoekklsdr';
+    const publicAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubnR6cHN3Zmljbm9la2tsc2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MjUwOTgsImV4cCI6MjA4ODEwMTA5OH0.No_ryirFyZGBXl2Q2mnY01dJwRDb0q9-ma1VneknGNk';
+    
+    async function testEmail() {
+      const email = document.getElementById('email').value;
+      const name = document.getElementById('name').value;
+      const resultDiv = document.getElementById('result');
+      const testBtn = document.getElementById('testBtn');
+      const statusDiv = document.getElementById('status');
+      
+      if (!email || !name) {
+        resultDiv.className = 'result error';
+        resultDiv.innerHTML = '❌ Please fill in both email and name fields.';
+        return;
+      }
+      
+      // Generate a test verification code
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      testBtn.disabled = true;
+      testBtn.innerHTML = '<span class="spinner"></span>Sending...';
+      
+      resultDiv.className = 'result';
+      resultDiv.innerHTML = '⏳ Contacting server...';
+      resultDiv.style.display = 'block';
+      
+      try {
+        const serverUrl = `https://${projectId}.supabase.co/functions/v1/make-server-a9dec19d/make-server-a9dec19d/send-verification-code`;
+        
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('📤 Testing Email System');
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('Server URL:', serverUrl);
+        console.log('Email:', email);
+        console.log('Name:', name);
+        console.log('Verification Code:', verificationCode);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${publicAnonKey}`,
+          },
+          body: JSON.stringify({
+            recipientEmail: email,
+            recipientName: name,
+            verificationCode: verificationCode,
+          }),
+        });
+        
+        const data = await response.json();
+        
+        console.log('📥 Response:', data);
+        
+        if (data.demoMode) {
+          // Demo mode - API key not configured
+          statusDiv.className = 'status demo';
+          statusDiv.textContent = '🟡 Demo Mode Active';
+          
+          resultDiv.className = 'result demo';
+          resultDiv.innerHTML = `
+            <h3 style="margin-bottom: 16px;">⚠️ Running in Demo Mode</h3>
+            <p style="margin-bottom: 16px;">The email service is not configured. Your verification code is:</p>
+            <div class="code-display">${verificationCode}</div>
+            <p style="margin-top: 16px;"><strong>Why Demo Mode?</strong></p>
+            <p>The <code>RESEND_API_KEY</code> environment variable is not configured in your Supabase Edge Function.</p>
+            <p style="margin-top: 12px;"><strong>To enable real emails:</strong></p>
+            <ol style="margin-left: 20px; margin-top: 8px; line-height: 1.8;">
+              <li>Sign up at <a href="https://resend.com" target="_blank" style="color: #d4af37; font-weight: 600;">resend.com</a></li>
+              <li>Get your API key (starts with "re_")</li>
+              <li>Add it to Supabase Edge Functions as <code>RESEND_API_KEY</code></li>
+            </ol>
+            <p style="margin-top: 16px; padding: 12px; background: white; border-radius: 6px;">
+              📖 See <strong>EMAIL_VERIFICATION_STATUS.md</strong> for detailed instructions
+            </p>
+          `;
+        } else if (response.ok && data.success) {
+          // Success - email was sent!
+          statusDiv.className = 'status active';
+          statusDiv.textContent = '✅ Email Service Active';
+          
+          resultDiv.className = 'result success';
+          resultDiv.innerHTML = `
+            <h3 style="margin-bottom: 16px;">✅ Email Sent Successfully!</h3>
+            <p>Check your inbox at <strong>${email}</strong></p>
+            <p style="margin-top: 12px;">📧 A verification code has been sent to your email address.</p>
+            ${data.emailId ? `<p style="margin-top: 8px; font-size: 12px; opacity: 0.8;">Email ID: ${data.emailId}</p>` : ''}
+          `;
+        } else {
+          // Error
+          resultDiv.className = 'result error';
+          resultDiv.innerHTML = `
+            <h3 style="margin-bottom: 16px;">❌ Error</h3>
+            <p><strong>Error message:</strong> ${data.error || 'Unknown error'}</p>
+            ${data.testingMode ? `
+              <p style="margin-top: 16px;"><strong>⚠️ Resend Testing Mode Detected</strong></p>
+              <p>You can only send emails to your Resend account email until you verify a domain.</p>
+              <p style="margin-top: 12px;"><strong>Quick fix:</strong> Use the email address you signed up with at Resend.</p>
+            ` : ''}
+          `;
+        }
+      } catch (error) {
+        console.error('❌ Error:', error);
+        
+        resultDiv.className = 'result error';
+        resultDiv.innerHTML = `
+          <h3 style="margin-bottom: 16px;">❌ Connection Error</h3>
+          <p><strong>Could not reach the server.</strong></p>
+          <p style="margin-top: 12px;">Possible reasons:</p>
+          <ul style="margin-left: 20px; margin-top: 8px; line-height: 1.8;">
+            <li>Edge Function not deployed</li>
+            <li>Network connection issue</li>
+            <li>CORS configuration problem</li>
+          </ul>
+          <p style="margin-top: 12px;"><strong>Error details:</strong> ${error.message}</p>
+        `;
+      } finally {
+        testBtn.disabled = false;
+        testBtn.innerHTML = '🚀 Send Test Verification Code';
+      }
+    }
+  </script>
+</body>
+</html>

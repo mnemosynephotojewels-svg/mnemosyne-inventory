@@ -1,0 +1,87 @@
+═══════════════════════════════════════════════════════════════
+🎯 MNEMOSYNE DATABASE SETUP - QUICK START (2 MINUTES)
+═══════════════════════════════════════════════════════════════
+
+⚠️  IMPORTANT: About Your Key
+────────────────────────────────────────────────────────────────
+The key you provided (sb_publishable_Ucl5bo_wy3ycTMRJHGSZ9Q_FE1sC35m) 
+is NOT a valid Supabase anon key.
+
+✅ GOOD NEWS: Your system is ALREADY configured with the correct 
+   JWT token. You don't need to change anything!
+
+═══════════════════════════════════════════════════════════════
+📋 SETUP STEPS
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Open Supabase SQL Editor
+👉 https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+
+STEP 2: Click "New Query"
+
+STEP 3: Copy the SQL from /supabase/init.sql and paste it
+
+STEP 4: Click "RUN" button
+
+STEP 5: Wait for "Success" message
+
+STEP 6: Test your setup:
+        - Open your Mnemosyne app
+        - Click "Account Settings" → "Test Database Connection"
+        - Press F12 to see results
+
+═══════════════════════════════════════════════════════════════
+✅ VERIFY IT WORKS
+═══════════════════════════════════════════════════════════════
+
+1. Go to Packaging Materials tab
+2. Click "Add Material"
+3. Add a test item (e.g., "Test Box", 100, "boxes")
+4. Press F12 and check console
+
+✅ SUCCESS if you see:
+   ✅✅✅ Successfully saved to Supabase database!
+   🎉 Material is now synced across all devices!
+
+❌ PROBLEM if you see:
+   ⚠️ Database table not created yet
+   → Go back to STEP 1 and run the SQL script
+
+═══════════════════════════════════════════════════════════════
+🔗 USEFUL LINKS
+═══════════════════════════════════════════════════════════════
+
+SQL Editor:
+https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+
+Table Editor (View Data):
+https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+
+API Settings (View Keys):
+https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/settings/api
+
+═══════════════════════════════════════════════════════════════
+📖 DETAILED GUIDES
+═══════════════════════════════════════════════════════════════
+
+Complete Setup:     /COMPLETE_SETUP_GUIDE.md
+Database Setup:     /DATABASE_SETUP.md
+Quick Start:        /QUICKSTART.md
+SQL Script:         /supabase/init.sql
+
+═══════════════════════════════════════════════════════════════
+🎉 AFTER SETUP YOU GET
+═══════════════════════════════════════════════════════════════
+
+✅ Cross-device synchronization
+✅ Cloud backup (never lose data!)
+✅ Team collaboration ready
+✅ Works offline (dual storage)
+✅ Real-time updates across devices
+
+═══════════════════════════════════════════════════════════════
+
+Your Mnemosyne system is ALREADY WORKING with localStorage.
+Database setup is OPTIONAL but RECOMMENDED for cross-device sync!
+
+💎 Happy inventory tracking! ✨

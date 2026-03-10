@@ -1,0 +1,70 @@
+═══════════════════════════════════════════════════════════════
+❌ INVALID API KEY ERROR - QUICK FIX NEEDED
+═══════════════════════════════════════════════════════════════
+
+PROBLEM:
+Your Supabase anon key is incorrect.
+
+CURRENT KEY (WRONG):
+sb_publishable_Ucl5bo_wy3ycTMRJHGSZ9Q_FE1sC35m
+❌ This format is NOT a valid Supabase anon key!
+
+CORRECT KEY FORMAT:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS...
+✅ Supabase anon keys start with "eyJ" and are 150-250 chars long
+
+═══════════════════════════════════════════════════════════════
+🎯 HOW TO FIX (30 SECONDS)
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Open this link
+👉 https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/settings/api
+
+STEP 2: Find "Project API keys" section
+
+STEP 3: Copy the "anon public" key
+        (NOT the "service_role secret" key!)
+        
+        It looks like this:
+        anon
+        public
+        eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS...
+        ☝️ COPY THIS ENTIRE STRING
+
+STEP 4: Share the key with me
+
+STEP 5: I'll update your system (10 seconds)
+
+STEP 6: Done! Your database will work perfectly!
+
+═══════════════════════════════════════════════════════════════
+📋 CHECKLIST: Is this the right key?
+═══════════════════════════════════════════════════════════════
+
+Before sharing, verify:
+☑ Starts with "eyJ"
+☑ Is 150-250 characters long
+☑ Has exactly 2 periods (.) in it
+☑ You got it from "anon public" (NOT "service_role secret")
+☑ You copied the ENTIRE key
+
+═══════════════════════════════════════════════════════════════
+🔗 QUICK LINKS
+═══════════════════════════════════════════════════════════════
+
+Get API Key:
+https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/settings/api
+
+Detailed Guide:
+See /GET_CORRECT_KEY.md
+
+Fix Instructions:
+See /FIX_API_KEY_ERROR.md
+
+═══════════════════════════════════════════════════════════════
+
+⏱️  TIME TO FIX: Less than 1 minute
+🎯 WHAT YOU NEED: Just the "anon public" key from Supabase
+✅ AFTER FIX: Database will sync across all devices!
+
+Ready to fix this? Get the key from the link above! 🚀

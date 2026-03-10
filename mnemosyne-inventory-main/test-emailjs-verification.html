@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test EmailJS - Mnemosyne</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a2647 0%, #1a4d8f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #0a2647;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #0a2647;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        .readonly {
+            background-color: #f9fafb;
+            color: #666;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #d4af37 0%, #b8961f 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .status.loading {
+            display: block;
+            background-color: #fff3cd;
+            border: 2px solid #ffc107;
+            color: #856404;
+        }
+
+        .status.success {
+            display: block;
+            background-color: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .status.error {
+            display: block;
+            background-color: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .status h3 {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .status p {
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .status code {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .config {
+            background-color: #f9fafb;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .config h3 {
+            color: #0a2647;
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .config p {
+            font-size: 13px;
+            margin: 6px 0;
+            color: #666;
+        }
+
+        .config code {
+            background-color: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #0a2647;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #856404;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            background-color: #e7f3ff;
+            border: 2px solid #2196F3;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #0a2647;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #333;
+            font-size: 13px;
+        }
+
+        .instructions li {
+            margin: 6px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test EmailJS Configuration</h1>
+        <p class="subtitle">Verify your Mnemosyne password reset email system</p>
+
+        <div class="config">
+            <h3>📧 Current Configuration</h3>
+            <p><strong>Public Key:</strong> <code id="publicKey">Loading...</code></p>
+            <p><strong>Service ID:</strong> <code id="serviceId">Loading...</code></p>
+            <p><strong>Template ID:</strong> <code id="templateId">Loading...</code></p>
+        </div>
+
+        <div class="instructions">
+            <h3>📖 How to Use This Test</h3>
+            <ol>
+                <li>Enter your email address below</li>
+                <li>Click "Send Test Email"</li>
+                <li>Check your inbox for the verification code</li>
+                <li>If successful, your EmailJS is configured correctly! ✅</li>
+                <li>If failed, follow the instructions in <code>/FIX_GMAIL_ERROR_412.md</code></li>
+            </ol>
+        </div>
+
+        <form id="testForm">
+            <div class="form-group">
+                <label for="email">📧 Your Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    placeholder="your-email@example.com" 
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="verificationCode">🔐 Verification Code (auto-generated)</label>
+                <input 
+                    type="text" 
+                    id="verificationCode" 
+                    class="readonly" 
+                    readonly
+                >
+            </div>
+
+            <button type="submit" id="sendBtn">
+                📤 Send Test Email
+            </button>
+        </form>
+
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        // EmailJS Configuration (from your Mnemosyne app)
+        const EMAILJS_PUBLIC_KEY = 'dbbr3PM3LhbdU7D6-';
+        const EMAILJS_SERVICE_ID = 'service_zrcx11y';
+        const EMAILJS_TEMPLATE_ID = 'template_y8ypuqa';
+
+        // Display configuration
+        document.getElementById('publicKey').textContent = EMAILJS_PUBLIC_KEY;
+        document.getElementById('serviceId').textContent = EMAILJS_SERVICE_ID;
+        document.getElementById('templateId').textContent = EMAILJS_TEMPLATE_ID;
+
+        // Generate random 6-digit code
+        function generateVerificationCode() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // Initialize EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        console.log('✅ EmailJS initialized');
+
+        // Set random verification code
+        const verificationCode = generateVerificationCode();
+        document.getElementById('verificationCode').value = verificationCode;
+        console.log('🔐 Generated verification code:', verificationCode);
+
+        // Handle form submission
+        document.getElementById('testForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const sendBtn = document.getElementById('sendBtn');
+            const status = document.getElementById('status');
+
+            // Show loading state
+            sendBtn.disabled = true;
+            sendBtn.textContent = '⏳ Sending...';
+            status.className = 'status loading';
+            status.innerHTML = `
+                <div class="spinner"></div>
+                <strong>Sending test email...</strong>
+                <p>This may take a few seconds...</p>
+            `;
+
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('📧 Sending test email via EmailJS');
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+            console.log('To:', email);
+            console.log('Code:', verificationCode);
+            console.log('Service:', EMAILJS_SERVICE_ID);
+            console.log('Template:', EMAILJS_TEMPLATE_ID);
+            console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+            try {
+                // Template parameters
+                const templateParams = {
+                    to_email: email,
+                    to_name: 'Test User',
+                    user_email: email,
+                    reply_to: email,
+                    email: email,
+                    recipient_email: email,
+                    verification_code: verificationCode,
+                    app_name: 'Mnemosyne',
+                    expiry_time: '10 minutes',
+                };
+
+                console.log('📤 Sending with params:', templateParams);
+
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+
+                console.log('✅ SUCCESS! Email sent');
+                console.log('Response:', response);
+
+                // Show success
+                status.className = 'status success';
+                status.innerHTML = `
+                    <h3>✅ Success! Email Sent</h3>
+                    <p>Check your inbox at <strong>${email}</strong></p>
+                    <p>Verification Code: <code>${verificationCode}</code></p>
+                    <p>Response Status: <code>${response.status} ${response.text}</code></p>
+                    <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #28a745;">
+                        🎉 <strong>Your EmailJS is configured correctly!</strong>
+                    </p>
+                `;
+
+                sendBtn.textContent = '✅ Email Sent Successfully!';
+
+            } catch (error) {
+                console.error('❌ ERROR! Failed to send email');
+                console.error('Error:', error);
+
+                // Show error with details
+                let errorMessage = 'Unknown error';
+                let errorDetails = '';
+
+                if (error.status === 412) {
+                    errorMessage = 'Gmail API Permissions Error (Status 412)';
+                    errorDetails = `
+                        <p><strong>Problem:</strong> Your Gmail service needs additional permissions</p>
+                        <p><strong>Solution:</strong> Switch to Personal Email service</p>
+                        <p style="margin-top: 10px;">📖 <strong>Follow these steps:</strong></p>
+                        <ol style="margin: 10px 0 0 20px; font-size: 13px;">
+                            <li>Open <code>/FIX_GMAIL_ERROR_412.md</code></li>
+                            <li>Follow the "Switch to Personal Email Service" instructions</li>
+                            <li>Update your Service ID in the code</li>
+                            <li>Try this test again</li>
+                        </ol>
+                    `;
+                } else if (error.text) {
+                    errorMessage = error.text;
+                    errorDetails = `<p>Status: <code>${error.status || 'Unknown'}</code></p>`;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                status.className = 'status error';
+                status.innerHTML = `
+                    <h3>❌ Error: ${errorMessage}</h3>
+                    ${errorDetails}
+                    <p style="margin-top: 12px;">Check the browser console (F12) for more details</p>
+                `;
+
+                sendBtn.disabled = false;
+                sendBtn.textContent = '🔄 Try Again';
+            }
+        });
+    </script>
+</body>
+</html>

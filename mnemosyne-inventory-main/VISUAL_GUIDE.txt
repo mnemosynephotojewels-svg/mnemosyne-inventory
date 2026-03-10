@@ -1,0 +1,212 @@
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   MNEMOSYNE DESCRIPTION FIELD - VISUAL SETUP GUIDE          ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+
+┌──────────────────────────────────────────────────────────────┐
+│  CURRENT STATUS: 99% COMPLETE!                               │
+└──────────────────────────────────────────────────────────────┘
+
+   ┌─────────────┐
+   │  RAW        │
+   │  MATERIALS  │
+   │  TAB (UI)   │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  APP.TSX    │
+   │  (Handler)  │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  API.TS     │
+   │  (Save)     │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  SUPABASE   │
+   │  DATABASE   │
+   └──────┬──────┘
+          │ ❌ NO COLUMN!
+          ▼
+          💥 ERROR!
+
+
+═══════════════════════════════════════════════════════════════
+
+                    🔧 THE FIX 🔧
+
+═══════════════════════════════════════════════════════════════
+
+
+STEP 1: GO TO SUPABASE
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│  🌐 https://supabase.com/dashboard/project/               │
+│     jqbmnoxxgocjadllsipn/editor                           │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+
+
+STEP 2: CLICK "SQL EDITOR" TAB
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│  [ Table Editor ]  [▶ SQL Editor ]  [ Database ]          │
+│                          ↑                                 │
+│                     CLICK HERE                             │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+
+
+STEP 3: PASTE THIS SQL
+┌────────────────────────────────────────────────────────────┐
+│  SQL Editor                                                │
+├────────────────────────────────────────────────────────────┤
+│                                                            │
+│  ALTER TABLE raw_materials                                 │
+│  ADD COLUMN IF NOT EXISTS category TEXT;                   │
+│                                                            │
+│  ALTER TABLE raw_materials                                 │
+│  ADD COLUMN IF NOT EXISTS description TEXT;                │
+│                                                            │
+│                                                            │
+├────────────────────────────────────────────────────────────┤
+│                                          [ ▶ RUN ]  ←CLICK │
+└────────────────────────────────────────────────────────────┘
+
+
+STEP 4: SUCCESS MESSAGE
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│  ✅ Success. No rows returned                              │
+│                                                            │
+│  (This is good! Columns were added!)                       │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+
+
+STEP 5: REFRESH YOUR APP
+┌────────────────────────────────────────────────────────────┐
+│                                                            │
+│  Press: Ctrl + Shift + R  (Windows/Linux)                  │
+│         Cmd + Shift + R   (Mac)                            │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════
+
+                 ✅ AFTER THE FIX ✅
+
+═══════════════════════════════════════════════════════════════
+
+
+   ┌─────────────┐
+   │  RAW        │
+   │  MATERIALS  │
+   │  TAB (UI)   │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  APP.TSX    │
+   │  (Handler)  │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  API.TS     │
+   │  (Save)     │
+   └──────┬──────┘
+          │ description: "Gold chain"
+          │ ✅ WORKING
+          ▼
+   ┌─────────────┐
+   │  SUPABASE   │
+   │  DATABASE   │
+   └──────┬──────┘
+          │ ✅ COLUMN EXISTS!
+          ▼
+          ✨ SAVED!
+
+
+═══════════════════════════════════════════════════════════════
+
+                   🧪 TEST IT 🧪
+
+═══════════════════════════════════════════════════════════════
+
+1. Open Mnemosyne App
+   └─> Click "Raw Materials" tab
+
+2. Click "+ Add Raw Material"
+   └─> Fill in the form:
+       ├─> Name: "Gold Chain"
+       ├─> Stock: 100
+       ├─> Unit: grams
+       └─> Description: "18k gold for necklaces"
+
+3. Click "Add Material"
+
+4. Press F12 (open console)
+   └─> Look for:
+       ✅✅✅ Successfully saved with description to Supabase!
+
+
+═══════════════════════════════════════════════════════════════
+
+                 📊 VERIFICATION 📊
+
+═══════════════════════════════════════════════════════════════
+
+Go to Supabase Table Editor:
+https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+
+Click "Table Editor" → "raw_materials"
+
+You should see:
+┌────┬──────────────┬───────┬──────┬──────────┬──────────────────┐
+│ id │ name         │ stock │ unit │ category │ description      │
+├────┼──────────────┼───────┼──────┼──────────┼──────────────────┤
+│ 1  │ Gold Chain   │ 100   │grams │ CHAIN    │ 18k gold for...  │
+└────┴──────────────┴───────┴──────┴──────────┴──────────────────┘
+                                        ↑            ↑
+                                    NEW COLUMNS!
+
+
+═══════════════════════════════════════════════════════════════
+
+              🎉 CONGRATULATIONS! 🎉
+
+═══════════════════════════════════════════════════════════════
+
+Your description field is now fully functional!
+
+  ✅ UI collects descriptions
+  ✅ Code saves descriptions
+  ✅ Database stores descriptions
+  ✅ App displays descriptions
+
+Total time: 30 seconds
+Total SQL: 2 lines
+Total effort: Minimal
+
+You're done! 🚀
+
+
+═══════════════════════════════════════════════════════════════
+
+             💎 Mnemosyne - Photo Memory Jewels ✨
+                 Inventory Management System
+
+═══════════════════════════════════════════════════════════════
