@@ -22,7 +22,7 @@ import { AccountSettingsPage } from './components/AccountSettingsPage';
 import { api, testConnection } from './services/api';
 import { FinishedProduct, RawMaterial, ActivityLog, PackagingMaterial } from './types/inventory';
 import { toast } from 'sonner';
-import {logoImage } from '../assets/logo.png';
+import logoImage from '../assets/logo.png';
 import { motion } from 'motion/react';
 import { Button } from './components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from './components/ui/dialog';
