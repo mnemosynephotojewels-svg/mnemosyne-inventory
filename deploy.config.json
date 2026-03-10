@@ -1,0 +1,12 @@
+{
+  "supabase": {
+    "functions": {
+      "enabled": false,
+      "deploy": false
+    },
+    "exclude": [
+      "functions/**",
+      "_functions_backup/**"
+    ]
+  }
+}

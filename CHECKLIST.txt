@@ -1,0 +1,95 @@
+═══════════════════════════════════════════════════════
+  MNEMOSYNE - DESCRIPTION FIELD SETUP CHECKLIST
+═══════════════════════════════════════════════════════
+
+✅ ALREADY DONE (NO ACTION NEEDED):
+  ✅ UI has description input field
+  ✅ Form collects description
+  ✅ Code passes description to API
+  ✅ API saves description to database
+  ✅ API fetches description from database
+  ✅ TypeScript types include description
+
+❌ TODO (YOUR ACTION REQUIRED):
+  ☐ Add description column to database
+
+═══════════════════════════════════════════════════════
+  STEP-BY-STEP INSTRUCTIONS
+═══════════════════════════════════════════════════════
+
+☐ STEP 1: Open Supabase
+  Go to: https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+  Click on the "SQL Editor" tab
+
+☐ STEP 2: Copy the SQL
+  Copy these 2 lines:
+  ┌────────────────────────────────────────────────────┐
+  │ ALTER TABLE raw_materials                          │
+  │ ADD COLUMN IF NOT EXISTS category TEXT;            │
+  │                                                    │
+  │ ALTER TABLE raw_materials                          │
+  │ ADD COLUMN IF NOT EXISTS description TEXT;         │
+  └────────────────────────────────────────────────────┘
+
+☐ STEP 3: Paste into SQL Editor
+  Paste the SQL into the editor
+
+☐ STEP 4: Run the SQL
+  Click the "RUN" button (or press Ctrl+Enter)
+  You should see: "Success. No rows returned"
+
+☐ STEP 5: Refresh Your App
+  Go back to your Mnemosyne app
+  Press Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+
+═══════════════════════════════════════════════════════
+  VERIFY IT WORKS
+═══════════════════════════════════════════════════════
+
+☐ STEP 6: Test Adding a Material
+  1. Click "Raw Materials" tab
+  2. Click "+ Add Raw Material"
+  3. Fill in:
+     - Name: Test Material
+     - Stock: 10
+     - Unit: pcs
+     - Description: This is a test description
+  4. Click "Add Material"
+
+☐ STEP 7: Check Console
+  Press F12 to open browser console
+  You should see:
+  ✅✅✅ Successfully saved with description to Supabase!
+
+☐ STEP 8: Verify in Database
+  Go to: https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+  Click "Table Editor" tab
+  Click "raw_materials" table
+  You should see your material with the description!
+
+═══════════════════════════════════════════════════════
+  TROUBLESHOOTING
+═══════════════════════════════════════════════════════
+
+❌ Error: "Could not find the 'description' column"
+   → You haven't run the SQL yet. Go back to Step 1.
+
+❌ Description doesn't save
+   → Refresh your app (Ctrl+Shift+R)
+
+❌ SQL error
+   → Make sure you're in the correct project
+   → URL should be: .../jqbmnoxxgocjadllsipn/...
+
+═══════════════════════════════════════════════════════
+  SUMMARY
+═══════════════════════════════════════════════════════
+
+Time needed: 2 minutes
+Steps: 5 simple steps
+SQL lines: 2 lines
+Complexity: Very easy
+
+After this, descriptions will save perfectly! 🎉
+
+═══════════════════════════════════════════════════════

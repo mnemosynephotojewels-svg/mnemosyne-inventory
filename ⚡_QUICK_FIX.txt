@@ -1,0 +1,132 @@
+═══════════════════════════════════════════════════════════════
+🔧 QUICK FIX - ERRORS RESOLVED IN 3 STEPS (10 MINUTES)
+═══════════════════════════════════════════════════════════════
+
+❌ PROBLEM: Tables don't exist yet!
+
+✅ SOLUTION: Run 2 SQL files in order
+
+═══════════════════════════════════════════════════════════════
+STEP 1: CREATE TABLES (5 min)
+═══════════════════════════════════════════════════════════════
+
+1. Go to: https://supabase.com/dashboard/project/johzjtbxgtafpwaenkio
+2. Click: "SQL Editor" (left sidebar)
+3. Click: "+ New query"
+4. Open file: 1_CREATE_TABLES_FIRST.sql
+5. Copy ALL content
+6. Paste into SQL Editor
+7. Click: "Run" button
+8. ✅ See: 4 tables with column counts
+
+═══════════════════════════════════════════════════════════════
+STEP 2: LOAD SAMPLE DATA (5 min)
+═══════════════════════════════════════════════════════════════
+
+1. Still in SQL Editor
+2. Click: "+ New query" (new query!)
+3. Open file: SAMPLE_DATA.sql
+4. Copy ALL content
+5. Paste into SQL Editor
+6. Click: "Run" button
+7. ✅ See: Record counts (35+ materials, etc.)
+
+═══════════════════════════════════════════════════════════════
+STEP 3: REFRESH & LOGIN (30 sec)
+═══════════════════════════════════════════════════════════════
+
+1. In browser, press F5 (refresh)
+2. Login:
+   - Username: mnemosyne
+   - Password: mnemosyne000
+3. ✅ Dashboard loads with data!
+4. ✅ All errors gone!
+
+═══════════════════════════════════════════════════════════════
+VERIFICATION
+═══════════════════════════════════════════════════════════════
+
+After STEP 1, you should see:
+┌────────────────────────┬───────────────┐
+│ table_name             │ column_count  │
+├────────────────────────┼───────────────┤
+│ raw_materials          │ 10            │
+│ packaging_materials    │ 7             │
+│ finished_products      │ 10            │
+│ activity_logs          │ 6             │
+└────────────────────────┴───────────────┘
+
+After STEP 2, you should see:
+┌────────────────────────┬───────────────┐
+│ table_name             │ record_count  │
+├────────────────────────┼───────────────┤
+│ Raw Materials          │ 35+           │
+│ Packaging Materials    │ 28            │
+│ Finished Products      │ 23            │
+│ Activity Logs          │ 20            │
+└────────────────────────┴───────────────┘
+
+After STEP 3:
+✅ No errors in browser console
+✅ Dashboard shows charts and data
+✅ All 6 tabs work
+✅ Raw Materials tab shows 35+ items
+
+═══════════════════════════════════════════════════════════════
+IMPORTANT: RUN IN THIS ORDER!
+═══════════════════════════════════════════════════════════════
+
+1st: 1_CREATE_TABLES_FIRST.sql   ← Creates empty tables
+2nd: SAMPLE_DATA.sql             ← Fills tables with data
+
+DO NOT run them in reverse order!
+
+═══════════════════════════════════════════════════════════════
+FILES YOU NEED
+═══════════════════════════════════════════════════════════════
+
+✅ 1_CREATE_TABLES_FIRST.sql     (In project root)
+✅ SAMPLE_DATA.sql               (In project root)
+
+═══════════════════════════════════════════════════════════════
+SUPABASE DASHBOARD
+═══════════════════════════════════════════════════════════════
+
+URL: https://supabase.com/dashboard/project/johzjtbxgtafpwaenkio
+
+Navigate to:
+- SQL Editor → Run SQL files
+- Table Editor → View created tables and data
+
+═══════════════════════════════════════════════════════════════
+AFTER FIXING
+═══════════════════════════════════════════════════════════════
+
+Test the BOM feature:
+1. Finished Products → "Classic White T-Shirt"
+2. Click "Use Product"
+3. Enter quantity: 2
+4. Go to Raw Materials
+5. Check "Cotton Fabric - White" → Stock decreased by 5! ✅
+
+═══════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════
+
+Still seeing errors?
+1. Hard refresh: Ctrl+Shift+R (Windows) or Cmd+Shift+R (Mac)
+2. Check Supabase Table Editor → All 4 tables should exist
+3. Click each table → Should have data inside
+4. Check browser console (F12) for specific errors
+
+═══════════════════════════════════════════════════════════════
+READ MORE
+═══════════════════════════════════════════════════════════════
+
+Detailed guide: 🔧_FIX_ERRORS_NOW.md
+Quick start: ⚡_START_HERE.md
+Full docs: 🎉_DATABASE_CONNECTED.md
+
+═══════════════════════════════════════════════════════════════
+🎯 READY TO FIX? START WITH STEP 1!
+═══════════════════════════════════════════════════════════════

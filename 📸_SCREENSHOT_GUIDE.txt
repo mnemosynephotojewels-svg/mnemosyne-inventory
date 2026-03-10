@@ -1,0 +1,260 @@
+📸 SCREENSHOT GUIDE - Fix EmailJS Template
+═══════════════════════════════════════════════════════════════
+
+❌ ERROR: "The recipients address is empty"
+✅ FIX: Add {{to_email}} to template settings
+
+
+🎯 WHERE TO FIND IT:
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Go to EmailJS Dashboard
+URL: https://dashboard.emailjs.com/admin
+
+┌─────────────────────────────────────────────────────────┐
+│  EmailJS Dashboard                              [Login] │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Left Sidebar:                                          │
+│  ┌────────────────────┐                                │
+│  │ 🏠 Dashboard        │                                │
+│  │ ✉️  Email Services  │                                │
+│  │ 📧 Email Templates  │ ← CLICK THIS!                 │
+│  │ 📊 Activity Log     │                                │
+│  │ ⚙️  Account         │                                │
+│  └────────────────────┘                                │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+
+STEP 2: Find Your Template
+┌─────────────────────────────────────────────────────────┐
+│  Email Templates                            [+ Create]  │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  Your Templates:                                        │
+│                                                         │
+│  ┌──────────────────────────────────────┐              │
+│  │ 📧 password_reset                    │ ← CLICK!     │
+│  │    ID: template_y8ypuqa              │              │
+│  │    Status: Active                    │              │
+│  │    [Edit] [Delete] [Clone]           │              │
+│  └──────────────────────────────────────┘              │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+
+STEP 3: Edit Template - TOP OF PAGE
+┌─────────────────────────────────────────────────────────┐
+│  Edit Template: password_reset              [Preview]  │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  📧 EMAIL SETTINGS:                                     │
+│  ─────────────────────────────────────────────         │
+│                                                         │
+│  To email:  [                        ]  ⭐ FIX THIS!   │
+│             ↑                                           │
+│             Type: {{to_email}}                          │
+│                                                         │
+│  From name: [Mnemosyne              ]                  │
+│                                                         │
+│  Subject:   [Your Password Reset Code - Mnemosyne]     │
+│                                                         │
+│  Reply to:  [                        ]  (optional)     │
+│                                                         │
+│  Bcc:       [                        ]  (optional)     │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+
+STEP 4: Scroll Down - Content Area
+┌─────────────────────────────────────────────────────────┐
+│  📝 EMAIL CONTENT:                                      │
+│  ─────────────────────────────────────────────         │
+│                                                         │
+│  Format: ◉ HTML  ○ Plain Text                          │
+│                                                         │
+│  ┌────────────────────────────────────────────┐        │
+│  │ <!DOCTYPE html>                            │        │
+│  │ <html>                                     │        │
+│  │   ...your HTML template...                 │        │
+│  │   {{to_name}}                              │        │
+│  │   {{verification_code}}                    │        │
+│  │   ...                                      │        │
+│  │ </html>                                    │        │
+│  └────────────────────────────────────────────┘        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+
+STEP 5: Save!
+┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│  [Preview Template]  [Save Changes] ← CLICK!           │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════
+
+🎯 THE KEY FIELD:
+═══════════════════════════════════════════════════════════════
+
+Look for this EXACT field name at the TOP of the template:
+
+  "To email:" [input box]
+
+Type EXACTLY this (including the curly braces):
+
+  {{to_email}}
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ CORRECT EXAMPLES:
+═══════════════════════════════════════════════════════════════
+
+To email: {{to_email}}               ✅ Perfect!
+To email: {{ to_email }}             ✅ Works (spaces OK)
+To email: {{  to_email  }}           ✅ Works (extra spaces OK)
+
+
+❌ WRONG EXAMPLES:
+═══════════════════════════════════════════════════════════════
+
+To email: [blank]                    ❌ This is your problem!
+To email: to_email                   ❌ Missing {{ }}
+To email: {to_email}                 ❌ Single braces
+To email: {{recipient}}              ❌ Wrong variable name
+To email: {{email}}                  ❌ Wrong variable name
+To email: my@email.com               ❌ Hardcoded email
+To email: {{to-email}}               ❌ Wrong separator (dash)
+
+
+═══════════════════════════════════════════════════════════════
+
+📋 COMPLETE TEMPLATE SETTINGS:
+═══════════════════════════════════════════════════════════════
+
+Field Name       | What to Enter
+─────────────────┼──────────────────────────────────────
+To email:        | {{to_email}}          ⭐ CRITICAL!
+From name:       | Mnemosyne             (or anything)
+Subject:         | Your Password Reset Code - Mnemosyne
+Reply to:        | (leave empty or add email)
+Bcc:             | (leave empty)
+
+
+═══════════════════════════════════════════════════════════════
+
+🔍 HOW TO VERIFY IT'S FIXED:
+═══════════════════════════════════════════════════════════════
+
+After saving the template:
+
+1. Look at the "To email" field
+2. You should see: {{to_email}}
+3. NOT blank!
+4. NOT just "to_email"
+5. WITH double curly braces: {{ }}
+
+
+═══════════════════════════════════════════════════════════════
+
+🧪 TEST AFTER FIX:
+═══════════════════════════════════════════════════════════════
+
+1. Save the template in EmailJS
+2. Wait 5 seconds (for changes to propagate)
+3. Open: /test-emailjs-now.html
+4. Enter your email address
+5. Click: "Send Test Email"
+6. Expected result:
+   
+   Before:  ❌ Status 422: "The recipients address is empty"
+   After:   ✅ Status 200: "OK"
+   Result:  ✅ Email arrives in inbox!
+
+
+═══════════════════════════════════════════════════════════════
+
+💡 WHY THIS FIELD IS IMPORTANT:
+═══════════════════════════════════════════════════════════════
+
+Content variables (in HTML):
+  {{verification_code}}    ← Shows code in email body
+  {{to_name}}             ← Shows name in email body
+  {{expiry_time}}         ← Shows expiration in email body
+
+Recipient variable (in settings):
+  {{to_email}}            ← Tells EmailJS WHERE to send!
+
+The "To email" field is NOT in the HTML content.
+It's in the SETTINGS at the TOP of the template page.
+
+
+═══════════════════════════════════════════════════════════════
+
+🎯 VISUAL COMPARISON:
+═══════════════════════════════════════════════════════════════
+
+CURRENT STATE (Broken):
+┌──────────────────────────────────┐
+│ To email: [                 ]    │  ← Empty = Error!
+└──────────────────────────────────┘
+
+AFTER FIX (Working):
+┌──────────────────────────────────┐
+│ To email: {{to_email}}           │  ← Fixed!
+└──────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════
+
+🆘 CAN'T FIND THE FIELD?
+═══════════════════════════════════════════════════════════════
+
+If you can't find the "To email" field:
+
+1. Make sure you're EDITING the template (not just viewing)
+2. Look at the VERY TOP of the page (above the HTML content)
+3. It's in the "Settings" section
+4. It should be the FIRST field
+5. Right above "From name"
+
+Alternative locations it might be:
+  • "Settings" tab at the top
+  • "Recipients" section
+  • Right after the template name
+
+
+═══════════════════════════════════════════════════════════════
+
+📱 MOBILE VIEW:
+═══════════════════════════════════════════════════════════════
+
+If you're on mobile, you might need to:
+1. Scroll to the top of the template edit page
+2. Look for "Template Settings" or "Recipients"
+3. The "To email" field should be there
+
+
+═══════════════════════════════════════════════════════════════
+
+✅ AFTER YOU FIX IT:
+═══════════════════════════════════════════════════════════════
+
+Reply with:
+
+  "Fixed it!"          → I'll guide you to test
+  "Can't find field"   → I'll give more detailed help
+  "Still get error"    → Tell me the exact error message
+
+
+═══════════════════════════════════════════════════════════════
+
+⚡ THIS IS A 30-SECOND FIX!
+
+Go to EmailJS → Click Template → Add {{to_email}} → Save!
+
+═══════════════════════════════════════════════════════════════

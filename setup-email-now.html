@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Setup Real Email Delivery - Mnemosyne</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    
+    .header p {
+      font-size: 20px;
+      opacity: 0.9;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      margin-bottom: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .step {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 2px solid #e9ecef;
+    }
+    
+    .step:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .step-title {
+      font-size: 24px;
+      color: #0a2647;
+      font-weight: bold;
+    }
+    
+    .step-content {
+      margin-left: 64px;
+    }
+    
+    .step-content p {
+      color: #495057;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    
+    .info-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    
+    .info-box p {
+      color: #0d47a1;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .warning-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    
+    .warning-box p {
+      color: #856404;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .success-box {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+    
+    .success-box p {
+      color: #155724;
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    
+    .code-box {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      color: #495057;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+    
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s;
+    }
+    
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    }
+    
+    .btn-secondary {
+      background: #6c757d;
+    }
+    
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+    
+    .checklist li {
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .checklist li:before {
+      content: '☐';
+      font-size: 24px;
+      color: #6c757d;
+    }
+    
+    .input-group {
+      margin: 16px 0;
+    }
+    
+    .input-group label {
+      display: block;
+      font-weight: 600;
+      color: #0a2647;
+      margin-bottom: 8px;
+    }
+    
+    .input-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Courier New', monospace;
+    }
+    
+    .input-group input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s;
+      margin-right: 12px;
+      margin-bottom: 12px;
+    }
+    
+    .link-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(10, 38, 71, 0.3);
+    }
+    
+    .command-box {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 16px 0;
+      position: relative;
+    }
+    
+    .command-box::before {
+      content: '$ ';
+      color: #4ec9b0;
+      font-weight: bold;
+    }
+    
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: #3a3a3a;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    
+    .copy-btn:hover {
+      background: #4a4a4a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>📧 Setup Real Email Delivery</h1>
+      <p>Follow these steps to enable actual email sending</p>
+    </div>
+
+    <!-- Status Card -->
+    <div class="card" style="background: linear-gradient(135deg, #fff3cd 0%, #fff9e6 100%); border-left: 6px solid #ffc107;">
+      <h2 style="color: #856404; margin-bottom: 16px;">⚠️ Current Status: DEMO MODE</h2>
+      <p style="color: #856404; margin: 0;">
+        Your system is working perfectly, but emails are being shown on screen instead of sent. 
+        Complete the steps below to enable real email delivery to any email address.
+      </p>
+    </div>
+
+    <!-- Main Steps -->
+    <div class="card">
+      
+      <!-- Step 1 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-number">1</div>
+          <div class="step-title">Sign Up for Resend</div>
+        </div>
+        <div class="step-content">
+          <p>Resend is a developer-friendly email API. It's <strong>100% FREE</strong> for up to 3,000 emails per month (perfect for Mnemosyne!).</p>
+          
+          <a href="https://resend.com/signup" target="_blank" class="link-button">
+            🚀 Sign Up at Resend.com
+          </a>
+          
+          <div class="info-box">
+            <p><strong>✅ What you get for FREE:</strong><br>
+            • 100 emails per day<br>
+            • 3,000 emails per month<br>
+            • No credit card required<br>
+            • Professional email delivery</p>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>📧 Important:</strong> Use a real email address that you can access - you'll need to verify it!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-number">2</div>
+          <div class="step-title">Get Your API Key</div>
+        </div>
+        <div class="step-content">
+          <p>After signing up and verifying your email:</p>
+          
+          <ol style="margin-left: 20px; color: #495057; line-height: 2;">
+            <li>Log in to Resend dashboard</li>
+            <li>Click on <strong>"API Keys"</strong> in the sidebar</li>
+            <li>Click <strong>"Create API Key"</strong></li>
+            <li>Give it a name: <code>Mnemosyne Password Reset</code></li>
+            <li>Select permission: <strong>"Sending access"</strong></li>
+            <li>Click <strong>"Create"</strong></li>
+            <li>Copy the API key (starts with <code>re_</code>)</li>
+          </ol>
+          
+          <a href="https://resend.com/api-keys" target="_blank" class="link-button">
+            🔑 Go to API Keys
+          </a>
+          
+          <div class="warning-box">
+            <p><strong>⚠️ Critical:</strong> Copy the ENTIRE key! It will look like: <code>re_AbCdEfGh123456...</code><br>
+            You won't be able to see it again after this!</p>
+          </div>
+          
+          <!-- API Key Input -->
+          <div class="input-group" style="margin-top: 24px;">
+            <label>📋 Paste Your API Key Here (for reference):</label>
+            <input type="text" id="apiKey" placeholder="re_...">
+            <small style="color: #6c757d; display: block; margin-top: 8px;">
+              This is just for your reference - you'll need to add it to Supabase in the next step
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-number">3</div>
+          <div class="step-title">Add API Key to Supabase</div>
+        </div>
+        <div class="step-content">
+          <p>Now add the API key to your Supabase project:</p>
+          
+          <ol style="margin-left: 20px; color: #495057; line-height: 2;">
+            <li>Go to Supabase Dashboard</li>
+            <li>Select your project: <code>anntzpswficnoekklsdr</code></li>
+            <li>Click <strong>"Edge Functions"</strong> in the sidebar</li>
+            <li>Find and click on: <code>make-server-a9dec19d</code></li>
+            <li>Go to <strong>"Secrets"</strong> or <strong>"Environment Variables"</strong> tab</li>
+            <li>Click <strong>"Add New Secret"</strong></li>
+            <li>Enter:
+              <ul style="margin-top: 8px;">
+                <li><strong>Name:</strong> <code>RESEND_API_KEY</code></li>
+                <li><strong>Value:</strong> Your API key from Step 2</li>
+              </ul>
+            </li>
+            <li>Click <strong>"Save"</strong></li>
+            <li>Click <strong>"Redeploy"</strong> button</li>
+          </ol>
+          
+          <a href="https://supabase.com/dashboard/project/anntzpswficnoekklsdr/functions" target="_blank" class="link-button">
+            🔧 Open Supabase Dashboard
+          </a>
+          
+          <div class="info-box">
+            <p><strong>💡 Tip:</strong> Make sure there are NO extra spaces before or after the API key when pasting!</p>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>⚠️ Important:</strong> After saving the secret, you MUST redeploy the Edge Function for changes to take effect!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-number">4</div>
+          <div class="step-title">Test Email Delivery</div>
+        </div>
+        <div class="step-content">
+          <p>Let's verify that everything is working:</p>
+          
+          <div class="input-group">
+            <label>📧 Your Email Address:</label>
+            <input type="email" id="testEmail" placeholder="your@email.com">
+          </div>
+          
+          <button onclick="testEmailSetup()">🧪 Test Email Delivery</button>
+          
+          <div id="testResult" style="margin-top: 16px;"></div>
+          
+          <div class="info-box" style="margin-top: 24px;">
+            <p><strong>✅ What should happen:</strong><br>
+            1. Click "Test Email Delivery"<br>
+            2. Wait a few seconds<br>
+            3. Check your email inbox<br>
+            4. You should receive a test verification code!</p>
+          </div>
+          
+          <div class="warning-box">
+            <p><strong>📝 Note:</strong> With the free Resend test domain (<code>onboarding@resend.dev</code>), 
+            you can only send to the email you signed up with. To send to any email, add your own domain in Resend settings.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step">
+        <div class="step-header">
+          <div class="step-number">5</div>
+          <div class="step-title">Try Password Reset</div>
+        </div>
+        <div class="step-content">
+          <p>Now test the full password reset flow in your Mnemosyne app:</p>
+          
+          <ol style="margin-left: 20px; color: #495057; line-height: 2;">
+            <li>Go to your Mnemosyne login page</li>
+            <li>Click <strong>"Forgot Password?"</strong></li>
+            <li>Enter your email address</li>
+            <li>Click <strong>"Send Verification Code"</strong></li>
+            <li>Check your email inbox! 📬</li>
+            <li>Enter the code and reset your password</li>
+          </ol>
+          
+          <div class="success-box">
+            <p><strong>🎉 Success indicators:</strong><br>
+            • No more "Demo Mode" messages<br>
+            • Toast notification: "Email sent successfully"<br>
+            • Email arrives in your inbox within seconds<br>
+            • Beautiful branded email template</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Troubleshooting Card -->
+    <div class="card" style="background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%); border-left: 6px solid #dc3545;">
+      <h2 style="color: #721c24; margin-bottom: 16px;">🔧 Troubleshooting</h2>
+      
+      <details style="margin-bottom: 16px;">
+        <summary style="font-weight: 600; color: #721c24; cursor: pointer; padding: 8px; background: white; border-radius: 4px;">
+          Still seeing "Demo Mode" message
+        </summary>
+        <div style="padding: 16px; background: white; margin-top: 8px; border-radius: 4px;">
+          <p style="color: #721c24; margin: 0; line-height: 1.6;">
+            <strong>Solution:</strong><br>
+            1. Verify API key is correct in Supabase<br>
+            2. Make sure secret name is exactly: <code>RESEND_API_KEY</code><br>
+            3. Redeploy the Edge Function<br>
+            4. Wait 30 seconds for redeployment<br>
+            5. Try password reset again
+          </p>
+        </div>
+      </details>
+      
+      <details style="margin-bottom: 16px;">
+        <summary style="font-weight: 600; color: #721c24; cursor: pointer; padding: 8px; background: white; border-radius: 4px;">
+          Email not received
+        </summary>
+        <div style="padding: 16px; background: white; margin-top: 8px; border-radius: 4px;">
+          <p style="color: #721c24; margin: 0; line-height: 1.6;">
+            <strong>Solution:</strong><br>
+            1. Check spam/junk folder<br>
+            2. Verify you're using the email you signed up to Resend with<br>
+            3. Check Resend dashboard > Logs for send status<br>
+            4. Make sure sender email is verified in Resend<br>
+            5. Wait a few minutes (can be delayed)
+          </p>
+        </div>
+      </details>
+      
+      <details>
+        <summary style="font-weight: 600; color: #721c24; cursor: pointer; padding: 8px; background: white; border-radius: 4px;">
+          "Invalid API Key" error
+        </summary>
+        <div style="padding: 16px; background: white; margin-top: 8px; border-radius: 4px;">
+          <p style="color: #721c24; margin: 0; line-height: 1.6;">
+            <strong>Solution:</strong><br>
+            1. Make sure you copied the COMPLETE API key<br>
+            2. Check for extra spaces before/after the key<br>
+            3. Verify the key starts with: <code>re_</code><br>
+            4. Try creating a new API key in Resend<br>
+            5. Update the secret in Supabase and redeploy
+          </p>
+        </div>
+      </details>
+    </div>
+
+    <!-- Next Steps Card -->
+    <div class="card" style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left: 6px solid #28a745;">
+      <h2 style="color: #155724; margin-bottom: 16px;">✅ After Setup</h2>
+      <p style="color: #155724; margin-bottom: 16px;">
+        Once emails are working, you can optionally:
+      </p>
+      <ul style="margin-left: 20px; color: #155724; line-height: 1.8;">
+        <li><strong>Add your own domain</strong> in Resend to send from <code>noreply@yourdomain.com</code></li>
+        <li><strong>Customize the email template</strong> in <code>/supabase/functions/server/index.tsx</code></li>
+        <li><strong>Monitor email delivery</strong> in the Resend dashboard</li>
+        <li><strong>Check email analytics</strong> (open rates, delivery rates, etc.)</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script>
+    async function testEmailSetup() {
+      const email = document.getElementById('testEmail').value;
+      const resultDiv = document.getElementById('testResult');
+      
+      if (!email) {
+        resultDiv.innerHTML = '<div class="warning-box"><p>Please enter your email address first!</p></div>';
+        return;
+      }
+      
+      resultDiv.innerHTML = '<div class="info-box"><p>⏳ Sending test email... Please wait...</p></div>';
+      
+      try {
+        const response = await fetch('https://anntzpswficnoekklsdr.supabase.co/functions/v1/make-server-a9dec19d/make-server-a9dec19d/send-verification-code', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFubnR6cHN3Zmljbm9la2tsc2RyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MjUwOTgsImV4cCI6MjA4ODEwMTA5OH0.No_ryirFyZGBXl2Q2mnY01dJwRDb0q9-ma1VneknGNk',
+          },
+          body: JSON.stringify({
+            recipientEmail: email,
+            recipientName: 'Test User',
+            verificationCode: '123456',
+          }),
+        });
+        
+        const data = await response.json();
+        
+        if (data.demoMode) {
+          resultDiv.innerHTML = '<div class="warning-box"><p>⚠️ <strong>Still in Demo Mode!</strong><br>The API key is not configured yet. Please complete Step 3 above.</p></div>';
+        } else if (data.success) {
+          resultDiv.innerHTML = '<div class="success-box"><p>✅ <strong>Success!</strong><br>Test email sent! Check your inbox (and spam folder). The verification code is: <strong>123456</strong></p></div>';
+        } else {
+          resultDiv.innerHTML = `<div class="warning-box"><p>⚠️ <strong>Error:</strong><br>${data.error || 'Unknown error occurred'}<br><br>Check the troubleshooting section below.</p></div>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<div class="warning-box"><p>⚠️ <strong>Connection Error:</strong><br>${error.message}<br><br>Make sure your Edge Function is deployed and accessible.</p></div>`;
+      }
+    }
+  </script>
+</body>
+</html>
