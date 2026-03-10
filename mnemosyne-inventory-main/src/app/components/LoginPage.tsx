@@ -86,7 +86,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
 
   toast.success(`Welcome back, ${response.user?.username}!`);
   onLoginSuccess();
-}
+}    
       } else {
         setErrors({ username: response.error || 'Login failed' });
         toast.error(response.error || 'Login failed');
