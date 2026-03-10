@@ -124,19 +124,6 @@ export function validatePassword(password: string): { valid: boolean; error?: st
 /**
  * Validate email format
  */
-export function validateEmail(email: string): { valid: boolean; error?: string } {
-  if (!email || email.trim().length === 0) {
-    return { valid: false, error: 'Email is required' };
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return { valid: false, error: 'Please enter a valid email address' };
-  }
-
-  return { valid: true };
-}
-
 /**
  * Login with username and password
  */
@@ -165,7 +152,6 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
   try {
     if (isConfigured()) {
       // Try production mode - use Supabase authentication
-      
       try {
         // Step 1: Get user by username to find associated email
         const { data: userData, error: userError } = await supabase
@@ -181,20 +167,17 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
           return loginDemoMode(username, password);
         }
 
-        // Step 2: Try localStorage password first (for password resets done client-side)
+        // Step 2: Try localStorage password first
         const storedPassword = localStorage.getItem('mnemosyne_demo_password');
         if (storedPassword && password === storedPassword) {
-          console.log('✅ Login successful with localStorage password (after password reset)');
+          console.log('✅ Login successful with localStorage password');
           
-          // Update last login timestamp
           await supabase
             .from('users')
             .update({ last_login: new Date().toISOString() })
             .eq('id', userData.id);
 
           recordLoginAttempt(username, true);
-          
-          // Store username and email in localStorage for Account Settings
           localStorage.setItem('mnemosyne_current_user', username);
           localStorage.setItem('mnemosyne_current_email', userData.email);
           
@@ -204,6 +187,42 @@ export async function login(credentials: LoginCredentials): Promise<AuthResponse
           };
         }
 
+        // Step 3: Authenticate with Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email: userData.email,
+          password: password,
+        });
+
+        if (authError) {
+          recordLoginAttempt(username, false);
+          return { success: false, error: 'Invalid username or password' };
+        }
+
+        // Step 4: Update last login timestamp
+        await supabase
+          .from('users')
+          .update({ last_login: new Date().toISOString() })
+          .eq('id', userData.id);
+
+        recordLoginAttempt(username, true);
+        localStorage.setItem('mnemosyne_current_user', username);
+        
+        return {
+          success: true,
+          user: userData,
+        };
+      } catch (dbError) {
+        console.log('Database error, using demo mode:', dbError);
+        return loginDemoMode(username, password);
+      }
+    } else {
+      return loginDemoMode(username, password);
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    return loginDemoMode(username, password);
+  }
+}
         // Step 3: Authenticate with Supabase Auth using the associated email
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
           email: userData.email,
