@@ -42,7 +42,8 @@ const CATEGORY_CONFIG: { [key: string]: string[] } = {
     'Engraved Photo Keychain',
     'Engraved Bar Bracelet',
     'Engraved Photo Memory Bracelet',
-    'Photo Memory (Resin) Bracelet'
+    'Photo Memory (Resin) Bracelet',
+    'Cufflinks'
   ],
   'Apparel Products': [
     'Photo Memory T-Shirt',
