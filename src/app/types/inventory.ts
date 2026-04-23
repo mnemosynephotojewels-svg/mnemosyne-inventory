@@ -39,6 +39,7 @@ export interface FinishedProduct {
   quantity: number; // Primary quantity field
   billOfMaterials?: BillOfMaterial[];
   imageUrl?: string;
+  description?: string; // Added Description
 }
 
 export interface ActivityLog {
