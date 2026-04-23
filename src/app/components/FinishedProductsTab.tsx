@@ -42,7 +42,7 @@ const CATEGORY_CONFIG: { [key: string]: string[] } = {
     'Engraved Photo Keychain',
     'Engraved Bar Bracelet',
     'Engraved Photo Memory Bracelet',
-    'Photo Memory (Resin) Bracelet',
+    'Photo Memory (Reysin) Bracelet',
     'Cufflinks'
   ],
   'Apparel Products': [
@@ -74,6 +74,7 @@ export function FinishedProductsTab({
   const [productSubCategory, setProductSubCategory] = useState('');
   const [productGender, setProductGender] = useState('');
   const [productImageUrl, setProductImageUrl] = useState('');
+  const [productDescription, setProductDescription] = useState('');
   const [billOfMaterials, setBillOfMaterials] = useState<{ materialId: string; quantity: number }[]>([]);
   
   // Filter State
@@ -97,6 +98,7 @@ export function FinishedProductsTab({
   const [editProductSubCategory, setEditProductSubCategory] = useState('');
   const [editProductGender, setEditProductGender] = useState('');
   const [editProductImageUrl, setEditProductImageUrl] = useState('');
+  const [editProductDescription, setEditProductDescription] = useState('');
   const [editBillOfMaterials, setEditBillOfMaterials] = useState<{ materialId: string; quantity: number }[]>([]);
 
   // Delete Product Dialog State
@@ -208,7 +210,9 @@ export function FinishedProductsTab({
       category: productCategory,
       subCategory: productSubCategory,
       gender: productCategory === 'Jewels Products' ? productGender : '',
+      description: productDescription.trim() || undefined,
       stock: 0,
+      quantity: 0,
       billOfMaterials,
       imageUrl: productImageUrl.trim() || undefined,
     });
@@ -222,6 +226,7 @@ export function FinishedProductsTab({
     setProductSubCategory('');
     setProductGender('');
     setProductImageUrl('');
+    setProductDescription('');
     setBillOfMaterials([]);
     setIsAddDialogOpen(false);
   };
@@ -349,8 +354,8 @@ export function FinishedProductsTab({
       return;
     }
 
-    // Check BOM materials stock
-    for (const bom of productToUse.billOfMaterials) {
+    // Check BOM materials stock  
+    for (const bom of productToUse.billOfMaterials || []) {
       const material = rawMaterials.find((m) => m.id === bom.materialId);
       const requiredQty = bom.quantity * qty;
       if (material && material.stock < requiredQty) {
@@ -400,7 +405,6 @@ export function FinishedProductsTab({
     setAddedAddOns([]);
 
     // Run deduction sequentially: raw materials (+ add-ons) FIRST, then add product stock
-    // Sequential await prevents race conditions between the two async state updates
     await onDeductProduct(capturedProductId, qty, undefined, capturedAddOnQuantities);
     await onAddProductStock(capturedProductId, qty);
 
@@ -447,7 +451,7 @@ export function FinishedProductsTab({
     if (!productToUse) return false;
     
     // Check BOM materials
-    for (const bom of productToUse.billOfMaterials) {
+    for (const bom of productToUse.billOfMaterials || []) {
       const material = rawMaterials.find(m => m.id === bom.materialId);
       const requiredQty = bom.quantity * productUseQuantity;
       if (material && material.stock < requiredQty) {
@@ -486,7 +490,8 @@ export function FinishedProductsTab({
     setEditProductSubCategory(product.subCategory || '');
     setEditProductGender(product.gender || '');
     setEditProductImageUrl(product.imageUrl || '');
-    setEditBillOfMaterials(product.billOfMaterials);
+    setEditProductDescription(product.description || '');
+    setEditBillOfMaterials((product.billOfMaterials || []) as { materialId: string; quantity: number }[]);
     setIsEditDialogOpen(true);
   };
 
@@ -508,9 +513,11 @@ export function FinishedProductsTab({
       category: editProductCategory,
       subCategory: editProductSubCategory,
       gender: editProductCategory === 'Jewels Products' ? editProductGender : '',
+      description: editProductDescription.trim() || undefined,
       stock: editingProduct.stock, // Keep existing stock
       billOfMaterials: editBillOfMaterials,
       imageUrl: editProductImageUrl.trim() || undefined,
+      quantity: 0
     });
 
     toast.success(`Product "${editProductName}" updated successfully`);
@@ -542,7 +549,7 @@ export function FinishedProductsTab({
   };
 
   const calculateMaxProduction = (product: FinishedProduct): number => {
-    if (product.billOfMaterials.length === 0) return 0;
+    if (!product.billOfMaterials || product.billOfMaterials.length === 0) return 0;
     
     let maxUnits = Infinity;
     
@@ -723,6 +730,18 @@ export function FinishedProductsTab({
                     </select>
                   </div>
                 )}
+
+                {/* Description Input */}
+                <div className="space-y-2">
+                  <Label htmlFor="product-description">Description</Label>
+                  <Input
+                    id="product-description"
+                    value={productDescription}
+                    onChange={(e) => setProductDescription(e.target.value)}
+                    placeholder="Brief description of the product..."
+                    className="w-full mt-1"
+                  />
+                </div>
 
                 {/* Bill of Materials */}
                 <div className="space-y-2">
@@ -987,19 +1006,26 @@ export function FinishedProductsTab({
                           </div>
                         )}
 
+                        {/* Product Description */}
+                        {product.description && (
+                          <p className="text-sm text-gray-500 text-center italic mb-4 px-2 line-clamp-2">
+                            {product.description}
+                          </p>
+                        )}
+
                         {/* Bill of Materials Display */}
                         <div className="bg-white rounded-lg p-3 border border-gray-200 mb-3">
                           <div className="flex items-center gap-2 mb-2">
                             <Package2 className="w-4 h-4 text-secondary" />
                             <span className="text-sm font-medium text-gray-700">Materials</span>
                             <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-600 text-xs">
-                              {product.billOfMaterials.length} items
+                              {(product.billOfMaterials || []).length} items
                             </Badge>
                           </div>
                           <ul className="space-y-2">
-                            {product.billOfMaterials.map((bom, idx) => {
+                            {(product.billOfMaterials || []).map((bom, idx) => {
                               const material = rawMaterials.find(m => m.id === bom.materialId);
-                              const isLow = isMaterialLowOrMissing(bom.materialId, bom.quantity);
+                              const isLow = isMaterialLowOrMissing(bom.materialId || '', bom.quantity);
                               
                               return (
                                 <li
@@ -1010,7 +1036,7 @@ export function FinishedProductsTab({
                                 >
                                   <div className="flex justify-between items-center">
                                     <span className="font-medium flex items-center gap-1">
-                                      {getMaterialName(bom.materialId)}
+                                      {getMaterialName(bom.materialId || '')}
                                       {isLow && <AlertCircle className="w-3 h-3" />}
                                     </span>
                                     <Badge variant="outline" className="bg-white border-gray-300 text-xs">
@@ -1300,7 +1326,7 @@ export function FinishedProductsTab({
                 </p>
                 <ul className="space-y-2">
                   {/* Base Materials from BOM */}
-                  {productToUse.billOfMaterials.map((bom, bomIdx) => {
+                  {(productToUse.billOfMaterials || []).map((bom, bomIdx) => {
                     const material = rawMaterials.find(m => m.id === bom.materialId);
                     const totalDeduction = bom.quantity * productUseQuantity;
                     const hasInsufficientStock = material && material.stock < totalDeduction;
@@ -1502,6 +1528,18 @@ export function FinishedProductsTab({
               </div>
             )}
 
+            {/* Description Input */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-product-description">Description</Label>
+              <Input
+                id="edit-product-description"
+                value={editProductDescription}
+                onChange={(e) => setEditProductDescription(e.target.value)}
+                placeholder="Brief description of the product..."
+                className="w-full mt-1"
+              />
+            </div>
+
             {/* Bill of Materials */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
@@ -1618,7 +1656,7 @@ export function FinishedProductsTab({
                   </div>
 
                   {productToDelete.category && (
-                    <div>
+                    <div className="">
                       <Label className="text-xs font-medium text-gray-500 uppercase tracking-wide">Category</Label>
                       <p className="text-base font-semibold text-gray-900 mt-1 truncate">
                         {productToDelete.category}
