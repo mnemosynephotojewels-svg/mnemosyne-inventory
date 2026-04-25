@@ -603,12 +603,9 @@ export function RawMaterialsTab({
                     onChange={(e) => setUnit(e.target.value)}
                   >
                     <option value="pcs">Pieces (pcs)</option>
-                    <option value="kg">Kilograms (kg)</option>
-                    <option value="g">Grams (g)</option>
-                    <option value="m">Meters (m)</option>
-                    <option value="cm">Centimeters (cm)</option>
-                    <option value="l">Liters (l)</option>
-                    <option value="ml">Milliliters (ml)</option>
+                    <option value="kg">Bundles</option>
+                    <option value="g">Rolls</option>
+                    <option value="m">Pack</option>
                   </select>
                 </div>
 
