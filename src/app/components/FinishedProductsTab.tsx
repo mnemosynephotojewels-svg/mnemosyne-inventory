@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Minus, ArrowUp, Package2, Upload, X, Pencil, Trash2, ArrowRight, AlertCircle, CheckCircle, AlertTriangle, Filter } from 'lucide-react';
+import { Plus, Minus, ArrowUp, Package2, Upload, X, Pencil, Trash2, ArrowRight, AlertCircle, CheckCircle, AlertTriangle, Filter, Search } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from './ui/dialog';
@@ -76,6 +76,10 @@ export function FinishedProductsTab({
   const [productImageUrl, setProductImageUrl] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [billOfMaterials, setBillOfMaterials] = useState<{ materialId: string; quantity: number }[]>([]);
+  
+  // BOM Search State
+  const [addBomSearch, setAddBomSearch] = useState<{ [key: number]: string }>({});
+  const [editBomSearch, setEditBomSearch] = useState<{ [key: number]: string }>({});
   
   // Filter State
   const [filterMainCategory, setFilterMainCategory] = useState<string>('all');
@@ -228,6 +232,7 @@ export function FinishedProductsTab({
     setProductImageUrl('');
     setProductDescription('');
     setBillOfMaterials([]);
+    setAddBomSearch({});
     setIsAddDialogOpen(false);
   };
 
@@ -254,6 +259,10 @@ export function FinishedProductsTab({
 
   const removeBOMMaterial = (index: number) => {
     setBillOfMaterials(billOfMaterials.filter((_, i) => i !== index));
+    // Clean up search state for removed index
+    const newSearch = { ...addBomSearch };
+    delete newSearch[index];
+    setAddBomSearch(newSearch);
   };
 
   // BOM Management for Edit Dialog
@@ -279,6 +288,10 @@ export function FinishedProductsTab({
 
   const removeEditBOMMaterial = (index: number) => {
     setEditBillOfMaterials(editBillOfMaterials.filter((_, i) => i !== index));
+    // Clean up search state for removed index
+    const newSearch = { ...editBomSearch };
+    delete newSearch[index];
+    setEditBomSearch(newSearch);
   };
 
   // Image Upload Handlers
@@ -492,6 +505,7 @@ export function FinishedProductsTab({
     setEditProductImageUrl(product.imageUrl || '');
     setEditProductDescription(product.description || '');
     setEditBillOfMaterials((product.billOfMaterials || []) as { materialId: string; quantity: number }[]);
+    setEditBomSearch({});
     setIsEditDialogOpen(true);
   };
 
@@ -761,20 +775,38 @@ export function FinishedProductsTab({
                     <div className="space-y-2">
                       {billOfMaterials.map((bom, index) => (
                         <div key={index} className="flex gap-2 items-end border p-3 rounded-lg bg-gray-50">
+                          
+                          {/* Searchable Dropdown Integration */}
                           <div className="flex-1">
                             <Label className="text-xs">Material</Label>
+                            <div className="relative mt-1 mb-1">
+                              <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2" />
+                              <Input
+                                placeholder="Search materials..."
+                                className="w-full pl-8 h-8 text-xs bg-gray-50 border-gray-200 focus:bg-white"
+                                value={addBomSearch[index] || ''}
+                                onChange={(e) => setAddBomSearch({ ...addBomSearch, [index]: e.target.value })}
+                              />
+                            </div>
                             <select
-                              className="w-full px-3 py-2 border rounded-md bg-white mt-1"
+                              className="w-full px-3 py-2 border rounded-md bg-white text-sm"
                               value={bom.materialId}
                               onChange={(e) => updateBOMMaterial(index, e.target.value)}
                             >
-                              {rawMaterials.map((material) => (
+                              {rawMaterials
+                                .filter((m) => m.name.toLowerCase().includes((addBomSearch[index] || '').toLowerCase()))
+                                .map((material) => (
                                 <option key={material.id} value={material.id}>
                                   {material.name}
                                 </option>
                               ))}
                             </select>
+                            {/* Warning if search finds nothing */}
+                            {rawMaterials.filter((m) => m.name.toLowerCase().includes((addBomSearch[index] || '').toLowerCase())).length === 0 && (
+                              <p className="text-[10px] text-red-500 mt-1">No matching materials found.</p>
+                            )}
                           </div>
+                          
                           <div className="w-32">
                             <Label className="text-xs">Quantity</Label>
                             <Input
@@ -782,10 +814,10 @@ export function FinishedProductsTab({
                               min="1"
                               value={bom.quantity}
                               onChange={(e) => updateBOMQuantity(index, parseInt(e.target.value) || 1)}
-                              className="mt-1"
+                              className="mt-1 h-10"
                             />
                           </div>
-                          <Button type="button" variant="destructive" size="sm" onClick={() => removeBOMMaterial(index)}>
+                          <Button type="button" variant="destructive" size="sm" onClick={() => removeBOMMaterial(index)} className="h-10">
                             Remove
                           </Button>
                         </div>
@@ -1558,20 +1590,37 @@ export function FinishedProductsTab({
                 <div className="space-y-2">
                   {editBillOfMaterials.map((bom, index) => (
                     <div key={index} className="flex gap-2 items-end border p-3 rounded-lg bg-gray-50">
+                      
+                      {/* Searchable Dropdown Integration for Edit Dialog */}
                       <div className="flex-1">
                         <Label className="text-xs">Material</Label>
+                        <div className="relative mt-1 mb-1">
+                          <Search className="w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-2" />
+                          <Input
+                            placeholder="Search materials..."
+                            className="w-full pl-8 h-8 text-xs bg-gray-50 border-gray-200 focus:bg-white"
+                            value={editBomSearch[index] || ''}
+                            onChange={(e) => setEditBomSearch({ ...editBomSearch, [index]: e.target.value })}
+                          />
+                        </div>
                         <select
-                          className="w-full px-3 py-2 border rounded-md bg-white mt-1"
+                          className="w-full px-3 py-2 border rounded-md bg-white text-sm"
                           value={bom.materialId}
                           onChange={(e) => updateEditBOMMaterial(index, e.target.value)}
                         >
-                          {rawMaterials.map((material) => (
-                            <option key={material.id} value={material.id}>
-                              {material.name}
-                            </option>
-                          ))}
+                          {rawMaterials
+                            .filter((m) => m.name.toLowerCase().includes((editBomSearch[index] || '').toLowerCase()))
+                            .map((material) => (
+                              <option key={material.id} value={material.id}>
+                                {material.name}
+                              </option>
+                            ))}
                         </select>
+                        {rawMaterials.filter((m) => m.name.toLowerCase().includes((editBomSearch[index] || '').toLowerCase())).length === 0 && (
+                           <p className="text-[10px] text-red-500 mt-1">No matching materials found.</p>
+                        )}
                       </div>
+
                       <div className="w-32">
                         <Label className="text-xs">Quantity</Label>
                         <Input
@@ -1579,10 +1628,10 @@ export function FinishedProductsTab({
                           min="1"
                           value={bom.quantity}
                           onChange={(e) => updateEditBOMQuantity(index, parseInt(e.target.value) || 1)}
-                          className="mt-1"
+                          className="mt-1 h-10"
                         />
                       </div>
-                      <Button type="button" variant="destructive" size="sm" onClick={() => removeEditBOMMaterial(index)}>
+                      <Button type="button" variant="destructive" size="sm" onClick={() => removeEditBOMMaterial(index)} className="h-10">
                         Remove
                       </Button>
                     </div>
