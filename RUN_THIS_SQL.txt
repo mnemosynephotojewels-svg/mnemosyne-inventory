@@ -1,0 +1,20 @@
+========================================
+COPY EVERYTHING BELOW (JUST 2 LINES!)
+========================================
+
+ALTER TABLE raw_materials ADD COLUMN IF NOT EXISTS category TEXT;
+ALTER TABLE raw_materials ADD COLUMN IF NOT EXISTS description TEXT;
+
+========================================
+WHERE TO RUN IT:
+========================================
+
+1. Go to: https://supabase.com/dashboard/project/jqbmnoxxgocjadllsipn/editor
+
+2. Paste the 2 lines above
+
+3. Click "RUN" button
+
+4. Refresh your Mnemosyne app (Ctrl+Shift+R)
+
+DONE! Description will now save! ✅

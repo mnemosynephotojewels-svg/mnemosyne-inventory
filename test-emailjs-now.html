@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test EmailJS - Mnemosyne</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .container {
+      max-width: 600px;
+      width: 100%;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .header h1 {
+      color: #0a2647;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 16px;
+    }
+    
+    .status-box {
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border-left: 4px solid #2196f3;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .status-box h3 {
+      color: #0d47a1;
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .status-box p {
+      color: #1565c0;
+      line-height: 1.6;
+      margin: 0;
+    }
+    
+    .config-grid {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .config-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .config-label {
+      font-weight: 600;
+      color: #495057;
+    }
+    
+    .config-value {
+      font-family: 'Courier New', monospace;
+      color: #0a2647;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #0a2647;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+    
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .result-box {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+    
+    .result-success {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      color: #155724;
+    }
+    
+    .result-error {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      color: #721c24;
+    }
+    
+    .result-box h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .result-box p {
+      margin: 0;
+      line-height: 1.6;
+    }
+    
+    .success-icon {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>🧪 Test EmailJS</h1>
+        <p>Verify your email configuration</p>
+      </div>
+
+      <div class="status-box">
+        <h3>✅ Configuration Detected</h3>
+        <p>Your EmailJS credentials have been configured in the system!</p>
+      </div>
+
+      <div class="config-grid">
+        <div class="config-item">
+          <span class="config-label">Public Key:</span>
+          <span class="config-value">dbbr3PM3LhbdU7D6-</span>
+        </div>
+        <div class="config-item">
+          <span class="config-label">Service ID:</span>
+          <span class="config-value">service_zrcx11y</span>
+        </div>
+        <div class="config-item">
+          <span class="config-label">Template ID:</span>
+          <span class="config-value">template_y8ypuqa</span>
+        </div>
+      </div>
+
+      <form id="testForm">
+        <div class="form-group">
+          <label>Your Email Address:</label>
+          <input type="email" id="emailInput" placeholder="your@email.com" required>
+          <small style="color: #666; font-size: 12px; display: block; margin-top: 4px;">
+            Test email will be sent to this address
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label>Your Name:</label>
+          <input type="text" id="nameInput" placeholder="John Doe" value="Test User">
+        </div>
+
+        <button type="submit" id="sendBtn">
+          📧 Send Test Email
+        </button>
+      </form>
+
+      <div id="resultBox" class="result-box"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    const PUBLIC_KEY = 'dbbr3PM3LhbdU7D6-';
+    const SERVICE_ID = 'service_zrcx11y';
+    const TEMPLATE_ID = 'template_y8ypuqa';
+
+    // Initialize EmailJS
+    emailjs.init(PUBLIC_KEY);
+    console.log('✅ EmailJS initialized');
+
+    const form = document.getElementById('testForm');
+    const resultBox = document.getElementById('resultBox');
+    const sendBtn = document.getElementById('sendBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('emailInput').value;
+      const name = document.getElementById('nameInput').value;
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Disable button
+      sendBtn.disabled = true;
+      sendBtn.textContent = '⏳ Sending...';
+      resultBox.style.display = 'none';
+
+      try {
+        console.log('📤 Sending test email...');
+        console.log('To:', email);
+        console.log('Name:', name);
+        console.log('Code:', verificationCode);
+
+        // Try multiple parameter variations for maximum compatibility
+        const templateParams = {
+          to_email: email,           // Try this
+          to_name: name,
+          user_email: email,         // And this
+          reply_to: email,           // And this
+          email: email,              // And this
+          recipient_email: email,    // And this
+          verification_code: verificationCode,
+          app_name: 'Mnemosyne',
+          expiry_time: '10 minutes'
+        };
+
+        console.log('📧 Template Params:', templateParams);
+
+        const response = await emailjs.send(
+          SERVICE_ID,
+          TEMPLATE_ID,
+          templateParams
+        );
+
+        console.log('✅ EmailJS Response:', response);
+
+        // Show success
+        resultBox.className = 'result-box result-success';
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+          <div class="success-icon">🎉</div>
+          <h3>✅ Email Sent Successfully!</h3>
+          <p>
+            <strong>Test verification code:</strong> ${verificationCode}<br><br>
+            Check your email inbox (and spam folder)!<br>
+            The email should arrive within a few seconds.<br><br>
+            <strong>EmailJS Response:</strong> ${response.text} (${response.status})
+          </p>
+        `;
+
+        // Reset form
+        form.reset();
+      } catch (error) {
+        console.error('❌ EmailJS Error:', error);
+
+        // Show error
+        resultBox.className = 'result-box result-error';
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+          <h3>❌ Email Failed to Send</h3>
+          <p>
+            <strong>Error:</strong> ${error.text || error.message}<br><br>
+            <strong>Possible issues:</strong><br>
+            • Check your EmailJS dashboard is active<br>
+            • Verify template ID is correct<br>
+            • Make sure Gmail is connected<br>
+            • Check EmailJS Activity Log for details<br><br>
+            <strong>Full error:</strong><br>
+            <code style="font-size: 12px; display: block; margin-top: 8px; background: #f8f9fa; padding: 8px; border-radius: 4px;">${JSON.stringify(error, null, 2)}</code>
+          </p>
+        `;
+      } finally {
+        // Re-enable button
+        sendBtn.disabled = false;
+        sendBtn.textContent = '📧 Send Test Email';
+      }
+    });
+  </script>
+</body>
+</html>

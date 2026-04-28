@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug EmailJS Template - Mnemosyne</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .card {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      margin-bottom: 20px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .header h1 {
+      color: #d32f2f;
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 16px;
+    }
+    
+    .alert-box {
+      background: #fff3cd;
+      border-left: 4px solid #ffc107;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    
+    .alert-box h3 {
+      color: #856404;
+      margin-bottom: 12px;
+    }
+    
+    .alert-box p {
+      color: #856404;
+      line-height: 1.6;
+      margin: 8px 0;
+    }
+    
+    .test-section {
+      margin: 24px 0;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 12px;
+    }
+    
+    .test-section h3 {
+      color: #0a2647;
+      margin-bottom: 16px;
+    }
+    
+    .param-grid {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    
+    .param-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      border: 2px solid #dee2e6;
+    }
+    
+    .param-item input[type="radio"] {
+      margin-right: 12px;
+    }
+    
+    .param-item label {
+      font-weight: 600;
+      color: #495057;
+      cursor: pointer;
+      flex: 1;
+    }
+    
+    .param-item code {
+      background: #e9ecef;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #d32f2f;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      color: #0a2647;
+      margin-bottom: 8px;
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #dee2e6;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    button {
+      width: 100%;
+      background: linear-gradient(135deg, #d32f2f 0%, #c62828 100%);
+      color: white;
+      border: none;
+      padding: 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 16px;
+      transition: transform 0.2s;
+      margin-top: 12px;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(211, 47, 47, 0.3);
+    }
+    
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .result-box {
+      margin-top: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+    
+    .result-success {
+      background: #d4edda;
+      border-left: 4px solid #28a745;
+      color: #155724;
+    }
+    
+    .result-error {
+      background: #f8d7da;
+      border-left: 4px solid #dc3545;
+      color: #721c24;
+    }
+    
+    .result-box h3 {
+      margin-bottom: 12px;
+      font-size: 18px;
+    }
+    
+    .instructions {
+      background: #e7f3ff;
+      border-left: 4px solid #2196f3;
+      padding: 20px;
+      border-radius: 12px;
+      margin-top: 24px;
+    }
+    
+    .instructions h3 {
+      color: #0d47a1;
+      margin-bottom: 12px;
+    }
+    
+    .instructions ol {
+      margin-left: 20px;
+      color: #1565c0;
+      line-height: 1.8;
+    }
+    
+    .instructions li {
+      margin: 8px 0;
+    }
+    
+    .code-box {
+      background: #2d2d2d;
+      color: #f8f8f2;
+      padding: 16px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <h1>🔍 EmailJS Template Debugger</h1>
+        <p>Let's find out which parameter name your template needs!</p>
+      </div>
+
+      <div class="alert-box">
+        <h3>⚠️ Why You're Here</h3>
+        <p><strong>Error:</strong> "The recipients address is empty"</p>
+        <p><strong>Cause:</strong> Your EmailJS template doesn't know which parameter contains the recipient email.</p>
+        <p><strong>Solution:</strong> We'll test different parameter names to find which one works!</p>
+      </div>
+
+      <div class="test-section">
+        <h3>🧪 Test Different Parameter Names</h3>
+        <p style="margin-bottom: 16px; color: #666;">
+          Select which parameter name to test. We'll send an email using that parameter name.
+        </p>
+        
+        <div class="param-grid">
+          <div class="param-item">
+            <input type="radio" id="param1" name="paramType" value="to_email" checked>
+            <label for="param1">
+              Try: <code>{{to_email}}</code>
+              <span style="color: #999; font-size: 12px; display: block; margin-top: 4px;">
+                Most common - use this in your template "To email" field
+              </span>
+            </label>
+          </div>
+          
+          <div class="param-item">
+            <input type="radio" id="param2" name="paramType" value="email">
+            <label for="param2">
+              Try: <code>{{email}}</code>
+              <span style="color: #999; font-size: 12px; display: block; margin-top: 4px;">
+                Alternative - simpler parameter name
+              </span>
+            </label>
+          </div>
+          
+          <div class="param-item">
+            <input type="radio" id="param3" name="paramType" value="user_email">
+            <label for="param3">
+              Try: <code>{{user_email}}</code>
+              <span style="color: #999; font-size: 12px; display: block; margin-top: 4px;">
+                Alternative - more descriptive
+              </span>
+            </label>
+          </div>
+          
+          <div class="param-item">
+            <input type="radio" id="param4" name="paramType" value="reply_to">
+            <label for="param4">
+              Try: <code>{{reply_to}}</code>
+              <span style="color: #999; font-size: 12px; display: block; margin-top: 4px;">
+                Alternative - commonly used for replies
+              </span>
+            </label>
+          </div>
+          
+          <div class="param-item">
+            <input type="radio" id="param5" name="paramType" value="recipient_email">
+            <label for="param5">
+              Try: <code>{{recipient_email}}</code>
+              <span style="color: #999; font-size: 12px; display: block; margin-top: 4px;">
+                Alternative - very explicit name
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <form id="testForm">
+        <div class="form-group">
+          <label>Your Email Address:</label>
+          <input type="email" id="emailInput" placeholder="your@email.com" required>
+        </div>
+
+        <button type="submit" id="sendBtn">
+          🚀 Test Selected Parameter
+        </button>
+      </form>
+
+      <div id="resultBox" class="result-box"></div>
+
+      <div class="instructions">
+        <h3>📋 How to Use This Tool</h3>
+        <ol>
+          <li><strong>Select a parameter name</strong> from the list above</li>
+          <li><strong>Enter your email address</strong> in the field</li>
+          <li><strong>Click "Test Selected Parameter"</strong></li>
+          <li><strong>Check the result:</strong>
+            <ul style="margin-top: 8px;">
+              <li>✅ <strong>Success (200)</strong> → That parameter works! Use it in your template!</li>
+              <li>❌ <strong>Error (422)</strong> → Try the next parameter</li>
+            </ul>
+          </li>
+          <li><strong>When you find one that works</strong>, go to your EmailJS template and put that exact parameter in the "To email" field</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="color: #0a2647; margin-bottom: 16px;">🎯 What to Do When You Find the Right Parameter</h3>
+      <p style="margin-bottom: 16px; color: #666; line-height: 1.6;">
+        When you get a SUCCESS result, follow these steps:
+      </p>
+      <ol style="margin-left: 20px; color: #495057; line-height: 1.8;">
+        <li>Note which parameter worked (e.g., <code>{{email}}</code>)</li>
+        <li>Go to EmailJS Dashboard: <a href="https://dashboard.emailjs.com/admin" target="_blank" style="color: #d32f2f;">https://dashboard.emailjs.com/admin</a></li>
+        <li>Click "Email Templates" → Open "password_reset"</li>
+        <li>Find the "To email" field at the TOP</li>
+        <li>Type the EXACT parameter that worked (with {{ }})</li>
+        <li>Click "Save Changes"</li>
+        <li>Test your Mnemosyne password reset!</li>
+      </ol>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    const PUBLIC_KEY = 'dbbr3PM3LhbdU7D6-';
+    const SERVICE_ID = 'service_zrcx11y';
+    const TEMPLATE_ID = 'template_y8ypuqa';
+
+    // Initialize EmailJS
+    emailjs.init(PUBLIC_KEY);
+    console.log('✅ EmailJS initialized');
+
+    const form = document.getElementById('testForm');
+    const resultBox = document.getElementById('resultBox');
+    const sendBtn = document.getElementById('sendBtn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('emailInput').value;
+      const selectedParam = document.querySelector('input[name="paramType"]:checked').value;
+      const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+      // Disable button
+      sendBtn.disabled = true;
+      sendBtn.textContent = `⏳ Testing {{${selectedParam}}}...`;
+      resultBox.style.display = 'none';
+
+      // Build template parameters with ONLY the selected parameter for recipient
+      const templateParams = {
+        to_name: 'Test User',
+        verification_code: verificationCode,
+        app_name: 'Mnemosyne',
+        expiry_time: '10 minutes'
+      };
+
+      // Add the selected parameter
+      templateParams[selectedParam] = email;
+
+      try {
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.log('🧪 TESTING PARAMETER:', selectedParam);
+        console.log('📧 Template Params:', templateParams);
+        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        const response = await emailjs.send(
+          SERVICE_ID,
+          TEMPLATE_ID,
+          templateParams
+        );
+
+        console.log('✅ SUCCESS! Response:', response);
+
+        // Show success
+        resultBox.className = 'result-box result-success';
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+          <h3>🎉 SUCCESS! This Parameter Works!</h3>
+          <p>
+            <strong>✅ Working Parameter:</strong> <code style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px;">{{${selectedParam}}}</code><br><br>
+            
+            <strong>📧 Email sent to:</strong> ${email}<br>
+            <strong>🔢 Test code:</strong> ${verificationCode}<br>
+            <strong>📊 Status:</strong> ${response.status} - ${response.text}<br><br>
+            
+            <strong style="color: #28a745; font-size: 18px;">🎯 NOW DO THIS:</strong><br><br>
+            
+            1. Go to EmailJS Dashboard<br>
+            2. Open your "password_reset" template<br>
+            3. Find the "To email" field (at the top)<br>
+            4. Type EXACTLY: <code style="background: #28a745; color: white; padding: 4px 8px; border-radius: 4px;">{{${selectedParam}}}</code><br>
+            5. Save the template<br>
+            6. Test your Mnemosyne password reset!<br><br>
+            
+            <strong>Check your email inbox now!</strong> (Check spam folder too)
+          </p>
+        `;
+
+      } catch (error) {
+        console.error('❌ FAILED! Error:', error);
+
+        // Show error
+        resultBox.className = 'result-box result-error';
+        resultBox.style.display = 'block';
+        resultBox.innerHTML = `
+          <h3>❌ This Parameter Didn't Work</h3>
+          <p>
+            <strong>Failed Parameter:</strong> <code>{{${selectedParam}}}</code><br><br>
+            <strong>Error:</strong> ${error.text || error.message}<br>
+            <strong>Status:</strong> ${error.status}<br><br>
+            
+            ${error.status === 422 ? 
+              `<strong>📌 Error 422 = EmailJS still can't find recipient</strong><br><br>
+              Try selecting a DIFFERENT parameter above and test again!<br><br>
+              OR check that you added the parameter to your template's "To email" field.` 
+              : 
+              `<strong>This is a different error.</strong> Check the EmailJS Activity Log for details.`
+            }
+          </p>
+        `;
+      } finally {
+        // Re-enable button
+        sendBtn.disabled = false;
+        sendBtn.textContent = '🚀 Test Selected Parameter';
+      }
+    });
+
+    // Add radio button change handler to show current selection
+    document.querySelectorAll('input[name="paramType"]').forEach(radio => {
+      radio.addEventListener('change', (e) => {
+        sendBtn.textContent = `🚀 Test {{${e.target.value}}}`;
+      });
+    });
+  </script>
+</body>
+</html>

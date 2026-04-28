@@ -1,0 +1,169 @@
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║         🎯 SIMPLE FIX - Error 422 "Recipients Address Empty"     ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+
+
+═══════════════════════════════════════════════════════════════════════
+                     ⚡ DO THIS RIGHT NOW ⚡
+═══════════════════════════════════════════════════════════════════════
+
+OPTION 1: Use My Diagnostic Tool (Easiest!)
+───────────────────────────────────────────────────────────────────
+
+1. Open in browser: /debug-emailjs-template.html
+
+2. This tool will test WHICH parameter name works for your template!
+
+3. Select a parameter → Click test → See if it works!
+
+4. When you find one that works, go to EmailJS and use that!
+
+⭐ THIS IS THE EASIEST WAY! IT TELLS YOU EXACTLY WHAT TO DO!
+
+
+OPTION 2: Manual Fix in EmailJS Dashboard
+───────────────────────────────────────────────────────────────────
+
+1. Go to: https://dashboard.emailjs.com/admin
+
+2. Click: "Email Templates" (left sidebar)
+
+3. Click: "password_reset" template
+
+4. Look at the VERY TOP for: "To email:" field
+
+5. Type ONE of these (try in order):
+   • {{to_email}}
+   • {{email}}  
+   • {{user_email}}
+   • {{reply_to}}
+
+6. Click: "Save Changes"
+
+7. Test: Open /test-emailjs-now.html and try again
+
+
+═══════════════════════════════════════════════════════════════════════
+                     🎯 THE PROBLEM EXPLAINED
+═══════════════════════════════════════════════════════════════════════
+
+Your code sends this data:
+┌─────────────────────────────────────┐
+│ {                                   │
+│   to_email: "user@email.com",       │
+│   email: "user@email.com",          │
+│   user_email: "user@email.com",     │
+│   verification_code: "123456"       │
+│ }                                   │
+└─────────────────────────────────────┘
+
+EmailJS needs to know:
+"Which one of these is the recipient email?"
+
+You tell it by setting the "To email" field in your template:
+┌─────────────────────────────────────┐
+│ To email: {{to_email}}              │  ← This tells EmailJS!
+└─────────────────────────────────────┘
+
+
+═══════════════════════════════════════════════════════════════════════
+                     📸 WHAT YOU'RE LOOKING FOR
+═══════════════════════════════════════════════════════════════════════
+
+In EmailJS Template Editor:
+
+┌───────────────────────────────────────────────────────┐
+│  Template: password_reset                             │
+├───────────────────────────────────────────────────────┤
+│                                                       │
+│  To email:   [                        ]  ⭐ HERE!    │
+│              ↑ Type: {{to_email}}                    │
+│                                                       │
+│  From name:  [Mnemosyne              ]               │
+│                                                       │
+│  Subject:    [Your Password Reset Code]              │
+│                                                       │
+└───────────────────────────────────────────────────────┘
+
+It's at the TOP of the page, NOT in the HTML content area!
+
+
+═══════════════════════════════════════════════════════════════════════
+                     ✅ CHECKLIST
+═══════════════════════════════════════════════════════════════════════
+
+Pick ONE method:
+
+METHOD A - Use Diagnostic Tool (Recommended):
+  [ ] Open /debug-emailjs-template.html
+  [ ] Test each parameter until one works
+  [ ] Note which one works
+  [ ] Add that to your EmailJS template
+  [ ] Test password reset
+
+METHOD B - Manual Fix:
+  [ ] Login to EmailJS
+  [ ] Open "password_reset" template
+  [ ] Find "To email" field at TOP
+  [ ] Add {{to_email}}
+  [ ] Save
+  [ ] Test password reset
+
+
+═══════════════════════════════════════════════════════════════════════
+                     🆘 STILL STUCK?
+═══════════════════════════════════════════════════════════════════════
+
+Tell me ONE of these:
+
+1. "I can't find the To email field"
+   → I'll give you a screenshot guide
+
+2. "I added {{to_email}} but still error 422"
+   → Tell me EXACTLY what you typed
+
+3. "I used debug tool and all parameters failed"
+   → Send me screenshot of EmailJS Activity Log
+
+4. "Debug tool said a parameter works!"
+   → Tell me which one, I'll help you add it
+
+
+═══════════════════════════════════════════════════════════════════════
+                     📁 FILES FOR YOU
+═══════════════════════════════════════════════════════════════════════
+
+Test & Debug:
+  🧪 /debug-emailjs-template.html    ⭐ USE THIS FIRST!
+  🧪 /test-emailjs-now.html          (basic test)
+
+Guides:
+  📖 /🚨_STILL_BROKEN_HERES_WHY.md   (detailed guide)
+  📖 /⚡_QUICK_FIX.txt                (quick guide)
+  📖 /📸_SCREENSHOT_GUIDE.txt         (visual guide)
+
+
+═══════════════════════════════════════════════════════════════════════
+                     💡 PRO TIP
+═══════════════════════════════════════════════════════════════════════
+
+The diagnostic tool (/debug-emailjs-template.html) will:
+
+✅ Test EACH parameter name one by one
+✅ Tell you EXACTLY which one works
+✅ Give you step-by-step instructions
+✅ Show you what to type in EmailJS
+✅ Confirm when email is sent successfully
+
+IT DOES ALL THE WORK FOR YOU!
+
+
+═══════════════════════════════════════════════════════════════════════
+
+               ⚡ FASTEST FIX: Open debug tool now! ⚡
+
+               /debug-emailjs-template.html
+
+═══════════════════════════════════════════════════════════════════════
