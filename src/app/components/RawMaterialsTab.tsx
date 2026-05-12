@@ -188,29 +188,28 @@ export function RawMaterialsTab({
     return true;
   });
 
-  // Group materials by category when filters are 'all'
-  const shouldGroupByCategory = filterCategory === 'all' && stockLevelFilter === 'all';
-  
-  // Group materials by category
+// Group materials by category
   const groupedMaterials: { [key: string]: RawMaterial[] } = {};
+  
   if (shouldGroupByCategory) {
-    // Group by category
+    // 1. Group by your defined categories (Case-Insensitive)
     MATERIAL_CATEGORIES.forEach(category => {
-      const materialsInCategory = filteredMaterials.filter(m => m.category === category);
+      const materialsInCategory = filteredMaterials.filter(m => 
+        m.category?.trim().toUpperCase() === category.toUpperCase()
+      );
       if (materialsInCategory.length > 0) {
         groupedMaterials[category] = materialsInCategory;
       }
     });
     
-    // Add uncategorized materials (materials with old categories or no category)
-    const uncategorized = filteredMaterials.filter(m => !MATERIAL_CATEGORIES.includes(m.category || ''));
+    // 2. The "Safety Net": Catch anything that didn't match the list above
+    const uncategorized = filteredMaterials.filter(m => {
+      const mCat = m.category?.trim().toUpperCase() || '';
+      return !MATERIAL_CATEGORIES.some(cat => cat.toUpperCase() === mCat);
+    });
+
     if (uncategorized.length > 0) {
-      groupedMaterials['Other Materials'] = uncategorized;
-    }
-    
-    // If no materials in any group, show all materials as uncategorized
-    if (Object.keys(groupedMaterials).length === 0 && filteredMaterials.length > 0) {
-      groupedMaterials['All Materials'] = filteredMaterials;
+      groupedMaterials['General / Other Materials'] = uncategorized;
     }
   } else {
     // Single group when filters are active
